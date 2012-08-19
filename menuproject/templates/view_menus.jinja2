@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
+    "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd"><html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <!--[if lte IE 8]>
+  <script src="http://js.cwhcode.com/html5/"></script>
+  <![endif]-->
+  <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta names="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
+  <script src='/static/j/jquery.js'></script>
+ 
+  
+</head>
+<body class="index">
+  
+  <div class="header">
+    <h1>All Menus</h1>
+    {% block head %}
+    {% endblock %}
+    </div>
+  
+  {% set months = "July", "August", "September", "October", "November", "December" %}
+  {% set selectedMonth = months[url-7] %}
+ <div class="head">
+    <a class="picker button" href="#">{{selectedMonth}} 2012</a>
+
+    <ul class="nav">
+    <div class="beak"><img src="/static/i/beak.png" alt="beak" width="23" height="8" /></div>
+    <span>
+      <li class="year"><a href="#">2012</a></li>
+      {% block select_month %}
+      {% for month in months %}
+      <li><a href="/view_menus/{{loop.index+6}}">{{month}}</a></li>
+      {% endfor %}
+      {% endblock %}
+      </span>
+    </ul>
+  </div>
+  
+  {% block view_or_edit %}
+{% set threeMeals = "Breakfast", "Lunch", "Dinner" %}
+  <div class="menu index">
+    <ul class="menu-index">
+      {% for weekly_menus in menus %}
+         <li class="divider">
+	  <div class="divider-title">Week of {{week_starts[loop.index-1]}}</div>
+      </li>
+
+      {% for menu in weekly_menus %}
+      {% set selectedMeal = threeMeals[menu.time_sort_key-1] %}
+      <li class="dish">
+	<a href="/menu/{{menu.id}}">
+	  <span class="dish-title">{{menu.name.decode('utf8')}}</span><span class="date">{{selectedMeal}}, {{menu.date.strftime("%A, %m/%d/%y")}}</span></a>
+	</li>
+      {% endfor %}
+      {% endfor %}
+      </ul>
+    </div>
+  {% endblock %}
+  <div class="modal-wrap">
+
+    {% block addMenu %}
+    {% endblock %}
+
+    
+    
+  </div>
+  
+  <script>
+      $('.picker').on('click', function() {
+      $('.nav').toggleClass('display');
+    });
+
+$(document).keyup(function(event) {
+    if(event.which === 27) {
+  $('.modal').removeClass('display');
+  $('.modal-wrap').removeClass('display');
+      $('.nav').removeClass('display');
+  }
+});
+  </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+

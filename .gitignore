@@ -1,0 +1,6 @@
+*.log
+*.*~
+*.pid
+build/*
+MenuProject.egg-info/*
+*.pyc

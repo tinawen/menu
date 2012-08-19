@@ -1,0 +1,97 @@
+{% extends "templates/view_menus.jinja2" %}
+{% block head %}
+  {{super() }}
+    <a class="add-dish button" href="#">Add a Menu</a>
+{% endblock %}
+
+{% block addMenu %}
+  <form class="adding adding-menu modal" onsubmit="return checkBeforeSubmit()" action="../create_menu">
+      <h2>Add a Menu</h2>
+      <a class="cancel" href="#">cancel</a>
+      <link href="/static/css/jquery-ui.css" rel="stylesheet" type="text/css"/>
+      <script src="/static/j/jquery-ui.min.js"></script>
+  
+      <script>
+	$(function() {
+	$( "#datepicker" ).datepicker({
+	   dateFormat : 'yy-mm-dd'
+	   });
+	});
+	</script>
+
+  <label for="date">What day is this for?</label>
+
+      <input type="text" id="datepicker" name="date">
+      
+      {% set threeMeals = "Breakfast", "Lunch", "Dinner"%}
+      	<div align="center"><br>
+	<label for="time">Which meal of the day is this for?</label>
+	{% for threeMeal in threeMeals %}
+	<div class="meal">
+	<input type="radio" class="checkbox" name="time" id="{{threeMeal}}" value="{{loop.index}}">
+	<label for="{{threeMeal}}" class="check-label">{{threeMeal}}</label>
+	</div>
+	{% endfor %}
+       </div>
+        <button type="submit" class="button floatright" name="submit">Add</button>
+      </form>
+
+      <script type="text/javascript">
+      	      var wasSubmitted = false;
+				  function checkBeforeSubmit() {
+				  if (!wasSubmitted) {
+				  wasSubmitted = true;
+				  return wasSubmitted;
+				  }
+				  return false;
+				  }
+
+        $('.add-dish').on('click', function() {
+	      $('.modal-wrap').toggleClass('display');
+	            $('.modal').toggleClass('display');
+      });
+  
+	$('.cancel').on('click', function() {
+	      $('.modal-wrap').toggleClass('display');
+	            $('.modal').toggleClass('display');
+      });
+      </script>
+
+
+{% endblock %}
+
+      {% block select_month %}
+      {% for month in months %}
+      <li><a href="/edit_menus/{{loop.index+6}}">{{month}}</a></li>
+      {% endfor %}
+      {% endblock %}
+
+{% block view_or_edit %}
+{% set threeMeals = "Breakfast", "Lunch", "Dinner" %}
+  <div class="menu index">
+    <ul class="menu-index">
+      {% for weekly_menus in menus %}
+       <li class="divider">
+      <div class="divider-title">Week of {{week_starts[loop.index-1]}}</div>
+      </li>
+      {% for menu in weekly_menus %}
+      {% set selectedMeal = threeMeals[menu.time_sort_key-1] %}
+      <li class="dish">
+      	<a href="/edit_menu/{{menu.id}}">
+	<span class="dish-title">{{menu.name.decode('utf8')}}</span><span class="date">{{selectedMeal}}, {{menu.date.strftime("%A, %m/%d/%y")}}</span></a>
+	</li>
+	{% endfor %}
+      {% endfor %}
+      </ul>
+    </div>
+
+{% endblock %}
+
+
+
+ 
+
+
+
+
+

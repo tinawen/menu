@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
+	  "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd"><html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+      <title></title>
+      <!--[if lte IE 8]>
+      <script src="http://js.cwhcode.com/html5/"></script>
+      <![endif]-->
+      <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta names="apple-mobile-web-app-status-bar-style" content="black" />
+      
+      <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
+      <link rel="stylesheet" href="/static/css/print.css" type="text/css" media="print" />
+    </head>
+    <body class="display">
+      <div class="menu-display">
+      	<ul class="menu-list">
+  	    {% for menuItem in menuItems %}
+	  <li class="dish">
+	    <div class="dish-title">{{menuItem.name}}</div>
+
+	    <div class="description">{{menuItem.description}}</div>
+
+	    {% set menuRestriction = menuItem.restriction %}
+            {% if menuRestriction %}
+	    {% set restrictions = menuItem.restriction %}
+	    {% for restriction in restrictions.split(' ') %}
+	    {% set imageName = "/static/i/" + restriction + ".png" %}
+            <img src={{imageName}} alt={{restriction}} width="20" height="20" />
+	    {% endfor %}
+	    {% endif %}
+	  </li>
+	    {% endfor %}
+
+	</ul>
+<!--	<input type=submit id=additem text="Add">  -->
+	</div>
+
+	<script src='/static/j/jquery.js'></script>
+	<script>
+
+	  // Modal Dialogues
+	  $modals = $('.modal-wrap, .modal');
+	  $('.add-dish, .cancel').on('click', function(){
+	  $modals.toggleClass('display');
+	  })
+
+	  $(document).keyup(function(event) {
+	  if(event.which === 27) {
+	  $('.modal, .modal-wrap, .nav').removeClass('display');
+	  }
+	  });
+
+	  // Scale/layout
+
+	  $('#additem').click(function(){
+	  $('.dish').eq(0).clone().appendTo($('.menu-list'))
+	  layout()
+	  });
+
+	  function layout(){
+	  $('.break').remove()
+	  var $dishes = $('.dish')
+	  var $visible = $dishes.filter(':visible')
+	  var count = $visible.length
+	  console.log(count)
+	  var all_breakpoints = new Array(
+	  [],
+	  [],
+	  [],
+	  [3],
+	  [4],
+	  [3],
+	  [2,4]
+	  )
+
+	  var breakpoints = all_breakpoints[count-1];
+	  
+	  for (var i = 0; i < breakpoints.length; i++) {
+			      $dishes.eq(breakpoints[i] - 1).before('<li class="break"></li>');
+			      console.log($dishes.eq(breakpoints[i] - 1));
+			      };
+			      }
+			      
+			      layout()
+
+
+			      </script>
+
+      </body>
+    </html>

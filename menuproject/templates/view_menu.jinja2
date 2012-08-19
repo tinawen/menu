@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
+          "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd"><html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+      <title></title>
+      <!--[if lte IE 8]>                                                                                                                                                                                                                                                                                                         
+      <script src="http://js.cwhcode.com/html5/"></script>                                                                                                                                                                                                                                                                       
+      <![endif]-->
+      <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta names="apple-mobile-web-app-status-bar-style" content="black" />
+      <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
+      <script src='j/jquery.js'></script>
+    </head>
+    <body>
+      <div class="header">
+	{% set threeMeals = "Breakfast", "Lunch", "Dinner" %}
+        <h1>Viewing {{menu.date}}, {{threeMeals[menu.time_sort_key-1]}}</h1>
+        <div class="read-title">{{menu.name.decode('utf8')}}</div>
+        <a class="back button" href="/">Back to Menus</a>
+      </div>
+      <div class="menu">
+        <ul class="menu-list">
+	  {% for menu_item in menu_items %}
+
+	  <li class="dish">                                                                                      <div class="dish-title">{{menu_item.name.decode('utf8')}}</div>                                     <div class="description">
+		{% for item_line in menu_item.description.decode('utf8').split('\n') %}
+			{{item_line}}<br/>
+		{% endfor %}
+</div>                                {% set menu_allergens = allergens[loop.index-1] %}
+	{% for restriction in menu_allergens %}
+	    {% set imageName = "/static/i/" + restriction + ".png" %}
+            <img src={{imageName}} alt="{{restriction}}" title="{{restriction}}" width="20" height="20" />
+	    {% endfor %}
+	    <br class="clear" />                                                  </li>                                                                                                                                                                                                                                                                                                                  
+          {% endfor %}                                                                                                                                                                                                                                                                                                                 </ul>
+      </div>
+    </body>
+ </html>

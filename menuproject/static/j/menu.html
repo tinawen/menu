@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
+    "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd"><html lang="en-us">
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<!--[if lte IE 8]>
+	<script src="http://js.cwhcode.com/html5/"></script>
+	<![endif]-->
+	<meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta names="apple-mobile-web-app-status-bar-style" content="black" />
+	
+	
+	
+	<style media="all" type="text/css">
+			
+		body{
+			background: #eee;
+			-webkit-transition: all .6s ease-in-out;
+			margin: 0;
+			padding: 0;
+			font-family: Opensans, helvetica, sans-serif;
+
+			}
+		
+		
+		.header{
+			margin: 0px 0 0 -370px;
+			padding: 0;
+			font-family: Opensans, helvetica, sans-serif;
+			position: fixed;
+			left: 50%;			
+			height: 70px;
+			width: 750px;
+			top: 0;
+			background: #eee;
+			z-index: 9999999;
+			-webkit-transition: all .2s ease-in-out;
+			}
+
+
+		.menu{
+			margin: 100px auto ;
+			overflow: auto;
+			padding: 0;
+			font-family: Opensans, helvetica, sans-serif;
+			width: 700px;
+			-webkit-transition: all .2s ease-in-out;
+			background: #fff;
+			box-shadow: 0 2px 20px rgba(0,0,0, .1);
+			border: 1px solid #aaa;
+			}
+
+
+
+		.menu-list{
+			margin-bottom: 2em;
+			margin: 5em 0 0 0;
+			padding: 0;	
+			float: left;
+			width: 100%;		
+			}
+
+		.menu-list li.dish{
+			border-bottom: 1px solid #eee; 
+			padding:1.4em 80px 0em 80px;
+			list-style: none;
+			width: 440px;
+			float: left;
+			margin: 0px 0em;
+			position: relative;
+			}
+		
+		label,input {
+			
+		       display: block;
+		       float: left;
+		       margin-bottom: 10px;
+		       }
+		
+		label {
+		       text-align: right;
+		       width: 10em;
+		       padding-right: 20px;
+		       }
+
+
+		label.check-label {
+		       width: 2em;
+		       padding-right: 20px;
+		       margin: 0 30px 10px 0;
+		       font-size: 12px;
+		       }
+
+		.checkbox {
+		       width: 2em;
+		       padding-right: 20px;
+		       }
+		
+		br {
+		       clear: left;
+		       }
+
+
+		h1{
+			font-size: 13px;
+			color: #999;
+			font-weight: normal;
+			left: 17%;
+			top: 4%;
+			z-index: 999999;	
+			text-align: center;
+		}
+		
+
+		
+		input.dish-title{
+			font-size: 16px;
+			color: #555;
+			font-weight: normal;
+			margin: 0;
+			padding: 0 0 .2em 4px;	
+			display: block;
+			background: #fff;
+			border: 4px solid #fff;
+			position: relative;
+			border-radius: 5px;
+			-webkit-transition: all .2s ease-in-out;
+			outline: none;		
+			margin-bottom: -5px;
+			width: 500px;			
+		}
+
+		input.dish-title:hover{
+			color: #555;
+			font-weight: normal;
+			display: block;
+			background: #fff;
+			border: none;
+
+			border: 4px solid rgba(0,0,0, .1);
+			z-index: 999999;
+		}
+
+
+		input.dish-title:focus{
+				background: #fff;
+			padding: 10px;
+			border: 3px solid rgba(0,0,0, .3);
+			outline: none;
+			box-shadow: inset 0 3px 8px rgba(0,0,0, .1);
+			z-index: 999999;
+		}
+
+
+
+		textarea.description{
+			font-size: 13px;
+			color: #888;
+			margin: 0;
+			padding: 5px 5px 0;
+			width: 500px;
+			line-height: 1.3em;
+			border: 4px solid #fff;
+			border-radius: 5px;
+			-webkit-transition: all .2s ease-in-out;
+			position: relative;
+			
+			}
+
+
+		textarea.description:hover{
+			border: 4px solid rgba(0,0,0, .1);
+			z-index: 999999;
+
+		}
+
+
+		textarea.description:focus{
+			background: #fff;
+			padding: 10px;
+			border: 3px solid rgba(0,0,0, .3);
+			outline: none;
+			box-shadow: inset 0 3px 8px rgba(0,0,0, .1);
+			z-index: 999999;
+		}
+
+
+		
+		.circle-button{
+			width: 50px;
+			height: 0px;
+			padding-top: 50px;
+			display: block;overflow: hidden;
+			opacity: .1;
+		}
+		
+		
+		.actions{
+			display: none;
+		}
+		
+		.dish:hover .actions{
+			display: block;
+		}
+		
+		.move{
+			position: absolute;
+			top: 37px;
+			left: 40px;	
+			background: url(i/arrows.png) no-repeat;		
+
+		}
+
+		.edit{
+			position: absolute;
+			top: 25px;
+			right: 130px;			
+			display: none;
+		}
+
+
+		.add-above{
+			position: absolute;
+			top: 25px;
+			right: 40px;			
+
+		}		
+
+
+		.remove{
+			position: absolute;
+			top: 25px;
+			right: 0px;			
+
+		}		
+		
+		.clear{
+		clear: both;
+		height: 0;
+		}
+	
+	
+		.add-dish{
+			position: absolute;
+			top: 15px;
+			right: 20px;
+			z-index: 99999;
+		}
+		
+
+.button{
+	width: 120px;
+	line-height: 25px;
+	-moz-border-radius: 5px; /* from vector shape */
+	-webkit-border-radius: 5px; /* from vector shape */
+	border-radius: 5px; /* from vector shape */
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box; /* prevents bg color from leaking outside the border */
+	background-color: rgba(255,255,255,.4); /* layer fill content */
+	-moz-box-shadow:
+		0 2px 0 rgba(255,255,255,.48) /* drop shadow */,
+		inset 0 1px 0 #fff /* inner shadow */,
+		0 0 0 1px rgba(0,0,0,.19) /* outer stroke */;
+	-webkit-box-shadow:
+		0 2px 0 rgba(255,255,255,.48) /* drop shadow */,
+		inset 0 1px 0 #fff /* inner shadow */,
+		0 0 0 1px rgba(0,0,0,.19) /* outer stroke */;
+	box-shadow:
+		0 0 0 1px rgba(0,0,0,.19) /* outer stroke */,
+		0 3px 1px rgba(255,255,255,1) /* drop shadow */,
+		inset 0 1px 0 #fff /* inner shadow */;
+	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGxpbmVhckdyYWRpZW50IGlkPSJoYXQwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSIwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNiNGI0YjQiIHN0b3Atb3BhY2l0eT0iMC4xOSIvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMC4xOSIvPgogICA8L2xpbmVhckdyYWRpZW50PgoKPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNoYXQwKSIgLz4KPC9zdmc+); /* gradient fill */
+	background-image: -moz-linear-gradient(90deg, rgba(180,180,180,.19) 0%, rgba(255,255,255,.19) 100%); /* gradient fill */
+	background-image: -o-linear-gradient(90deg, rgba(180,180,180,.19) 0%, rgba(255,255,255,.19) 100%); /* gradient fill */
+	background-image: -webkit-linear-gradient(90deg, rgba(180,180,180,.19) 0%, rgba(255,255,255,.19) 100%); /* gradient fill */
+	background-image: linear-gradient(90deg, rgba(180,180,180,.19) 0%, rgba(255,255,255,.19) 100%); /* gradient fill */
+	margin: 10px;
+}
+	
+	
+	
+.button:hover {
+	-moz-border-radius: 5px; /* from vector shape */
+	-webkit-border-radius: 5px; /* from vector shape */
+	border-radius: 5px; /* from vector shape */
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box; /* prevents bg color from leaking outside the border */
+	background-color: #fff; /* layer fill content */
+	-moz-box-shadow:
+		0 2px 3px rgba(0,0,0,.13) /* drop shadow */,
+		0 0 0 1px rgba(0,0,0,.19) /* outer stroke */;
+	-webkit-box-shadow:
+		0 2px 3px rgba(0,0,0,.13) /* drop shadow */,
+		0 0 0 1px rgba(0,0,0,.19) /* outer stroke */;
+	box-shadow:
+		0 2px 3px rgba(0,0,0,.13) /* drop shadow */,
+		0 0 0 1px rgba(0,0,0,.19) /* outer stroke */;
+	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGxpbmVhckdyYWRpZW50IGlkPSJoYXQwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSIwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwMDAiIHN0b3Atb3BhY2l0eT0iMC4wNyIvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMC4wNyIvPgogICA8L2xpbmVhckdyYWRpZW50PgoKPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNoYXQwKSIgLz4KPC9zdmc+); /* gradient fill */
+	background-image: -moz-linear-gradient(90deg, rgba(0,0,0,.07) 0%, rgba(255,255,255,.07) 100%); /* gradient fill */
+	background-image: -o-linear-gradient(90deg, rgba(0,0,0,.07) 0%, rgba(255,255,255,.07) 100%); /* gradient fill */
+	background-image: -webkit-linear-gradient(90deg, rgba(0,0,0,.07) 0%, rgba(255,255,255,.07) 100%); /* gradient fill */
+	background-image: linear-gradient(90deg, rgba(0,0,0,.07) 0%, rgba(255,255,255,.07) 100%); /* gradient fill */
+}
+
+
+
+.button:active {
+	-moz-border-radius: 5px; /* from vector shape */
+	-webkit-border-radius: 5px; /* from vector shape */
+	border-radius: 5px; /* from vector shape */
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box; /* prevents bg color from leaking outside the border */
+	background-color: rgba(255,255,255,.4); /* layer fill content */
+	-moz-box-shadow:
+		0 2px 0 rgba(255,255,255,.48) /* drop shadow */,
+		inset 0 1px 3px rgba(0,0,0,.26) /* inner shadow */,
+		0 0 0 1px rgba(0,0,0,.19) /* outer stroke */;
+	-webkit-box-shadow:
+		0 2px 0 rgba(255,255,255,.48) /* drop shadow */,
+		inset 0 1px 3px rgba(0,0,0,.26) /* inner shadow */,
+		0 0 0 1px rgba(0,0,0,.19) /* outer stroke */;
+	box-shadow:
+		0 2px 0 rgba(255,255,255,.48) /* drop shadow */,
+		inset 0 1px 3px rgba(0,0,0,.26) /* inner shadow */,
+		0 0 0 1px rgba(0,0,0,.19) /* outer stroke */;
+	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGxpbmVhckdyYWRpZW50IGlkPSJoYXQwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjEwMCUiIHgyPSI1MCUiIHkyPSIwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNiNGI0YjQiIHN0b3Atb3BhY2l0eT0iMC4zMyIvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMC4zMyIvPgogICA8L2xpbmVhckdyYWRpZW50PgoKPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNoYXQwKSIgLz4KPC9zdmc+); /* gradient fill */
+	background-image: -moz-linear-gradient(90deg, rgba(180,180,180,.33) 0%, rgba(255,255,255,.33) 100%); /* gradient fill */
+	background-image: -o-linear-gradient(90deg, rgba(180,180,180,.33) 0%, rgba(255,255,255,.33) 100%); /* gradient fill */
+	background-image: -webkit-linear-gradient(90deg, rgba(180,180,180,.33) 0%, rgba(255,255,255,.33) 100%); /* gradient fill */
+	background-image: linear-gradient(90deg, rgba(180,180,180,.33) 0%, rgba(255,255,255,.33) 100%); /* gradient fill */
+}	
+	
+	
+	
+	a.button{
+		display: block;
+		text-decoration: none;
+		color: #999;
+		text-align: center;
+		font-size: 12px;
+		
+	}
+	
+	
+	.adding{
+		position: absolute;top: 200px;
+		width: 500px;
+		background: white;
+		
+	}
+	
+	
+			
+		.modal{
+			width: 648px;
+			padding: 0px;
+			border: 1px solid #999;
+			border-top: 1px solid #aaa;
+			box-shadow: 0 4px 16px rgba(0,0,0, .1);
+			position: absolute;
+			height: 308px;
+			top: -1100px;			
+			background: #fff;
+			left: 50%;
+			margin-left: -300px;
+			-webkit-transition: all .1s ease-in-out .1s;
+			border-radius: 10px;
+z-index: 999999999;
+overflow: hidden;
+opacity: 0;
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box; /* prevents bg color from leaking outside the border */
+	padding: 35px;
+			}		
+	
+
+		.modal.display{
+			opacity: 1;
+			top: 200px;
+			}		
+	
+
+	
+	
+		.modal-wrap{
+			position: fixed;
+			height: 0%;
+			width: 100%;
+			top: 0;
+			left: 0;
+			opacity: 1;
+			background: rgba(250,250,250, .8);
+			-webkit-transition: opacity .4s ease-in-out;	
+			z-index: 99999999;
+			}
+			
+
+
+		.modal-wrap.display{
+			height: 100%;
+			opacity: 1;
+			}
+	
+	
+	
+			.modal input{
+				
+				font-size: 15px !important;
+				
+
+			padding: 15px;
+			border: 1px solid #999;
+			border-top: 1px solid #aaa;
+			box-shadow:inset 0 3px 3px rgba(0,0,0, .1);
+
+			
+
+			background: #fff;
+
+			-webkit-transition: all .1s ease-in-out .1s;
+			border-radius: 5px;
+
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box; /* prevents bg color from leaking outside the border */
+				
+			}
+
+	
+	
+			.modal label{
+width: 100%;
+text-align: left;
+margin: 15px 0 5px 0;
+				
+			}
+	
+			.allergens{
+				padding: 0 0 15px 5px;
+				float: left;
+			}
+	
+	
+			.clear{
+				clear: both;
+			}
+	
+	
+	
+			.title{
+					
+				}
+	
+	
+	
+	
+
+		
+		.title{
+			font-size: 16px;
+			color: #555;
+			font-weight: normal;
+			padding: 0 0 .2em 4px;	
+			display: block;
+			background: none;
+			border: 4px solid #eee;
+			border-radius: 5px;
+			-webkit-transition: all .2s ease-in-out;
+			outline: none;		
+			width: 400px;			
+			margin: 0 0 0 167px;
+			border: 1px solid;
+			text-align: center;
+			}
+
+
+		.title:hover{
+			color: #555;
+			font-weight: normal;
+			display: block;
+			border: none;
+
+			border: 4px solid rgba(0,0,0, .1);
+			z-index: 999999;
+			}
+
+
+		.title:focus{
+				background: #fff;
+			padding: 10px;
+			border: 3px solid rgba(0,0,0, .3);
+			outline: none;
+			box-shadow: inset 0 3px 8px rgba(0,0,0, .1);
+			z-index: 999999;
+			}	
+			
+			.back{
+				position: absolute;
+				left: 10px;
+				top: 15px;
+				
+			}
+	
+	</style>
+	
+	<script src='j/jquery.js'></script>
+	
+	
+</head>
+<body>
+
+	
+	
+		<div class="header">
+			<h1>Editing Monday 25th, July 2012</h1>
+			<input type="text" class="title" value="Smolked Salmon" />
+			<a class="add-dish button" href="#">Add a Dish</a>
+			<a class="back button" href="#">Back to Menus</a>
+
+
+		</div>
+	
+	
+		<div class="menu">
+		
+		
+			<ul class="menu-list">
+				<li class="dish">
+					<input type="text" class="dish-title" value="Roasted studded garlic pork loin">
+					<textarea class="description">glazed with garlic confit and Heirloom tomatoes, buttermilk mashed potatoes, steamed summer vegetables</textarea>
+					<div class="allergens">
+						<input class="checkbox" type="checkbox" id="shelfish" name="shelfish">
+	
+						<label class="check-label" for="city">Shelfish</label>
+		
+						<input class="checkbox" type="checkbox" id="seafood" name="seafood">				
+						<label class="check-label" for="city">Seafood</label>
+		
+						<input class="checkbox" type="checkbox" id="peanuts" name="peanuts">
+						<label class="check-label" for="city">Peanuts</label>
+		
+						<input class="checkbox" type="checkbox" id="dairy" name="dairy">
+		
+						<label class="check-label" for="city">Dairy</label>
+						<br class="clear" />
+					</div>
+					<div class="actions"><a href="#" class="move circle-button">Move</a><a href="#" class="edit circle-button">Edit</a><a class="add-above circle-button" href="#">Add Above</a><a class="remove circle-button" href="#">Remove</a></div>
+																			
+				</li>
+				<li class="dish">
+					<input type="text" class="dish-title" value="Panko crusted crab cakes">
+					<textarea class="description">Lime mayonnaise carrot, cabbage slaw, Lemon aioli</textarea>
+					<div class="allergens">
+						<input class="checkbox" type="checkbox" id="shelfish" name="shelfish">
+	
+						<label class="check-label" for="city">Shelfish</label>
+		
+						<input class="checkbox" type="checkbox" id="seafood" name="seafood">				
+						<label class="check-label" for="city">Seafood</label>
+		
+						<input class="checkbox" type="checkbox" id="peanuts" name="peanuts">
+						<label class="check-label" for="city">Peanuts</label>
+		
+						<input class="checkbox" type="checkbox" id="dairy" name="dairy">
+		
+						<label class="check-label" for="city">Dairy</label>
+						<br class="clear" />
+					</div>
+					<div class="actions"><a href="#" class="move circle-button">Move</a><a href="#" class="edit circle-button">Edit</a><a class="add-above circle-button" href="#">Add Above</a><a class="remove circle-button" href="#">Remove</a></div>
+				</li>
+				<li class="dish">
+					<input type="text" class="dish-title" value="Black bean, mango, quinoa salad">
+					<textarea class="description">Assorted baby lettuces, Mustardy vinaigrette</textarea>
+					<div class="allergens">
+						<input class="checkbox" type="checkbox" id="shelfish" name="shelfish">
+	
+						<label class="check-label" for="city">Shelfish</label>
+		
+						<input class="checkbox" type="checkbox" id="seafood" name="seafood">				
+						<label class="check-label" for="city">Seafood</label>
+		
+						<input class="checkbox" type="checkbox" id="peanuts" name="peanuts">
+						<label class="check-label" for="city">Peanuts</label>
+		
+						<input class="checkbox" type="checkbox" id="dairy" name="dairy">
+		
+						<label class="check-label" for="city">Dairy</label>
+						<br class="clear" />
+					</div>
+					<div class="actions"><a href="#" class="move circle-button">Move</a><a href="#" class="edit circle-button">Edit</a><a class="add-above circle-button" href="#">Add Above</a><a class="remove circle-button" href="#">Remove</a></div>
+				</li>
+				<li class="dish">
+					<input type="text" class="dish-title" value="Crispy barley risotto and vegetable wedges">
+					<textarea class="description">Assorted baby lettuces, Mustardy vinaigrette</textarea>
+					
+						<div class="allergens">
+						<input class="checkbox" type="checkbox" id="shelfish" name="shelfish">
+	
+						<label class="check-label" for="city">Shelfish</label>
+		
+						<input class="checkbox" type="checkbox" id="seafood" name="seafood">				
+						<label class="check-label" for="city">Seafood</label>
+		
+						<input class="checkbox" type="checkbox" id="peanuts" name="peanuts">
+						<label class="check-label" for="city">Peanuts</label>
+		
+						<input class="checkbox" type="checkbox" id="dairy" name="dairy">
+		
+						<label class="check-label" for="city">Dairy</label>
+						<br class="clear" />
+					</div>
+					<div class="actions"><a href="#" class="move circle-button">Move</a><a href="#" class="edit circle-button">Edit</a><a class="add-above circle-button" href="#">Add Above</a><a class="remove circle-button" href="#">Remove</a></div>
+				</li>
+				<li class="dish">
+					<input type="text" class="dish-title" value="Kori Gassi">
+					<textarea class="description">(Mongolian chicken curry)</textarea>
+					<div class="allergens">
+						<input class="checkbox" type="checkbox" id="shelfish" name="shelfish">
+	
+						<label class="check-label" for="city">Shelfish</label>
+		
+						<input class="checkbox" type="checkbox" id="seafood" name="seafood">				
+						<label class="check-label" for="city">Seafood</label>
+		
+						<input class="checkbox" type="checkbox" id="peanuts" name="peanuts">
+						<label class="check-label" for="city">Peanuts</label>
+		
+						<input class="checkbox" type="checkbox" id="dairy" name="dairy">
+		
+						<label class="check-label" for="city">Dairy</label>
+						<br class="clear" />
+					</div>
+					<div class="actions"><a href="#" class="move circle-button">Move</a><a href="#" class="edit circle-button">Edit</a><a class="add-above circle-button" href="#">Add Above</a><a class="remove circle-button" href="#">Remove</a></div>
+				</li>
+				<li class="dish">
+					<input type="text" class="dish-title" value="Tarka Daal">
+					<textarea class="description">(Yellow lentils)</textarea>
+					<div class="allergens">
+						<input class="checkbox" type="checkbox" id="shelfish" name="shelfish">
+	
+						<label class="check-label" for="city">Shelfish</label>
+		
+						<input class="checkbox" type="checkbox" id="seafood" name="seafood">				
+						<label class="check-label" for="city">Seafood</label>
+		
+						<input class="checkbox" type="checkbox" id="peanuts" name="peanuts">
+						<label class="check-label" for="city">Peanuts</label>
+		
+						<input class="checkbox" type="checkbox" id="dairy" name="dairy">
+		
+						<label class="check-label" for="city">Dairy</label>
+						<br class="clear" />
+					</div>
+					<div class="actions"><a href="#" class="move circle-button">Move</a><a href="#" class="edit circle-button">Edit</a><a class="add-above circle-button" href="#">Add Above</a><a class="remove circle-button" href="#">Remove</a></div>
+				</li>																		
+			</ul>
+		
+		
+		
+		
+		
+		
+		</div>
+		
+		
+		
+		
+		<div class="modal-wrap">
+
+	
+			<form class="adding modal">
+				<h2>Add a Dish</h2>
+				<a class="button cancel" href="#">cancel</a>					
+								
+				<label class="clear" for="name">Dish Name</label>
+				<input id="name" name="name">
+				<br>
+				<label for="address">Description</label>
+				<input id="address" name="address">
+				<br>
+				<h3>Allergens</h3>
+				<input class="checkbox" type="checkbox" id="shelfish" name="shelfish">
+				<label class="check-label" for="city">Shelfish</label>
+
+				<input class="checkbox" type="checkbox" id="seafood" name="seafood">				
+				<label class="check-label" for="city">Seafood</label>
+
+				<input class="checkbox" type="checkbox" id="peanuts" name="peanuts">
+				<label class="check-label" for="city">Peanuts</label>
+
+				<input class="checkbox" type="checkbox" id="dairy" name="dairy">
+
+				<label class="check-label" for="city">Dairy</label>
+				<br>
+				
+			</form>
+
+
+			
+			
+		</div>	
+	
+
+	<script>
+
+
+
+  $('.add-dish').on('click', function() {
+
+      $('.modal-wrap').toggleClass('display');
+
+      $('.modal').toggleClass('display');
+  
+
+    });
+		
+		
+		
+	</script>
+	
+</body>
+</html>
+
+
+
+
+
+
+
+
+
