@@ -4,3 +4,4 @@
 build/*
 MenuProject.egg-info/*
 *.pyc
+dist/*
