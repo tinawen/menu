@@ -697,6 +697,7 @@ li.year a:hover {
   top: 20px;
   left: 20px;
 }
+
 @media only screen and (min-width: 400px) {
   .menu-list {
     padding: 2em 0.2em;
@@ -711,3 +712,6 @@ li.year a:hover {
     font-size: 1.2em;
   }
 }
+
+
+

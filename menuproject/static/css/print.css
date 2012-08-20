@@ -1,8 +1,16 @@
-@page {
-    margin: 0;
+
+body {
+    margin: -30px 0 0 0;
 }
 
+h1 {
+    display:none;
+}
 
+.back.button
+{
+    display:none;
+}
 .menu-list {
 padding: 0;
 width: 100%;
@@ -11,14 +19,26 @@ margin: 0;
 }
 
 
-.dish{
-    width: 300px;
+.menu-list .dish{
+    width: 400px;
     float:  left;
-    clear:  none;
     height: 0;
-    padding-top:  300px;
+    padding: 150px 0;
+    list-style: none;
+    margin: 30px 100px 30px 100px;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    page-break-inside:avoid;
+    border-style:solid;
+    border-width: 2px;
+    background: #aec url("../i/logo.png") top no-repeat;
+    background-size:223px 29px;
 }
 
+.read-title {
+    display:none;
+    }
 #additem{
 display:none;
 }

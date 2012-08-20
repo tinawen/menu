@@ -40,6 +40,8 @@ setup(name='MenuProject',
       main = menuproject:main
       [console_scripts]
       initialize_MenuProject_db = menuproject.scripts.initializedb:main
+      dump_MenuProject_db = menuproject.scripts.dumpdb:main
+      load_MenuProject_db = menuproject.scripts.loaddb:main
       """,
       )
 
