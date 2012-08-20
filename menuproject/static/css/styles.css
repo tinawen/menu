@@ -698,6 +698,10 @@ li.year a:hover {
   left: 20px;
 }
 
+.dish .logo {
+    display:none;
+}
+
 @media only screen and (min-width: 400px) {
   .menu-list {
     padding: 2em 0.2em;

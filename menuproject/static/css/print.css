@@ -13,27 +13,32 @@ h1 {
 }
 .menu-list {
 padding: 0;
-width: 100%;
+width: 90%;
 border: 1px solid;
 margin: 0;
 }
 
 
 .menu-list .dish{
-    width: 400px;
+    width: 350px;
     float:  left;
-    height: 0;
-    padding: 150px 0;
+    height: 100px;
+    padding: 180px 20px 20px 20px;
     list-style: none;
-    margin: 30px 100px 30px 100px;
-    display: inline-block;
-    vertical-align: top;
+    margin: 60px 100px 0px 70px;
+    display: inline;
     position: relative;
     page-break-inside:avoid;
     border-style:solid;
-    border-width: 2px;
-    background: #aec url("../i/logo.png") top no-repeat;
-    background-size:223px 29px;
+    border-width: 1px;
+}
+
+.dish .logo {
+    display: inline;
+    padding: 100px 50px 20px 50px;
+    margin: -120px 0 -10px 0;
+    width: 150px;
+    height: 20px;
 }
 
 .read-title {

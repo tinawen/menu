@@ -25,7 +25,9 @@
         <ul class="menu-list">
 	  {% for menu_item in menu_items %}
 
-	  <li class="dish">                                                                                      <div class="dish-title">{{menu_item.name.decode('utf8')}}</div>                                     <div class="description">
+	  <li class="dish">
+            <img src="/static/i/logo.png" class="logo"/>
+	    <div class="dish-title">{{menu_item.name.decode('utf8')}}</div>                                     <div class="description">
 		{% for item_line in menu_item.description.decode('utf8').split('\n') %}
 			{{item_line}}<br/>
 		{% endfor %}
