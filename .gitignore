@@ -5,3 +5,5 @@ build/*
 MenuProject.egg-info/*
 *.pyc
 dist/*
+.hg/*
+menu_backup/*
