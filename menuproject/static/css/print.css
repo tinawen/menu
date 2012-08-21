@@ -46,8 +46,6 @@ margin: 0;
     list-style: none;
     margin: 0;
     page-break-inside:avoid;
-    border-width: 1px;
-    border-style: solid;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-box-pack: center;
