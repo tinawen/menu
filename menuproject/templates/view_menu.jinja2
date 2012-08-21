@@ -27,16 +27,23 @@
 
 	  <li class="dish">
             <img src="/static/i/logo.png" class="logo"/>
-	    <div class="dish-title">{{menu_item.name.decode('utf8')}}</div>                                     <div class="description">
-		{% for item_line in menu_item.description.decode('utf8').split('\n') %}
-			{{item_line}}<br/>
-		{% endfor %}
-</div>                                {% set menu_allergens = allergens[loop.index-1] %}
-	{% for restriction in menu_allergens %}
-	    {% set imageName = "/static/i/" + restriction + ".png" %}
+	    <div class="dish-title">{{menu_item.name.decode('utf8')}}</div> 
+	    {% if menu_item.description.decode('utf8') %} 
+	    <div class="description">
+	      {% for item_line in menu_item.description.decode('utf8').split('\n') %}
+	      {{item_line}}<br/>
+	      {% endfor %}
+	    </div>
+	    {% endif %}
+	    <div class="allergen-images">
+            {% set menu_allergens = allergens[loop.index-1] %}
+	    {% for restriction in menu_allergens %}
+	      {% set imageName = "/static/i/" + restriction + ".png" %}
             <img src={{imageName}} alt="{{restriction}}" title="{{restriction}}" width="20" height="20" />
 	    {% endfor %}
-	    <br class="clear" />                                                  </li>                                                                                                                                                                                                                                                                                                                  
+	    <br class="clear" />
+	    </div>
+	  </li>                                                                                                                                                                                                                                                                                                                  
           {% endfor %}                                                                                                                                                                                                                                                                                                                 </ul>
       </div>
     </body>

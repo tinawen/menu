@@ -278,6 +278,9 @@ input.dish-title:focus {
   overflow: visible;
   width: 100%;
 }
+.allergen-images {
+    padding: 4px 0 0 0;
+}
 .menu textarea.description:hover {
   border: 4px solid rgba(0,0,0,0.1);
   z-index: 999999;
