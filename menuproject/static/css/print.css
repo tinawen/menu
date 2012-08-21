@@ -23,7 +23,6 @@ h1 {
 .menu-list {
 padding: 0;
 width: 100%;
-border: 1px solid;
 margin: 0;
 }
 
@@ -32,19 +31,27 @@ margin: 0;
     padding: 0;
     border: 0;
     border-top: 0;
-    box-shadow: 0;
+    box-shadow: 0 0 0 0;
     -webkit-box-shadow: 0;
     background: #fff;
+    width: 100%;
+    height: 100%;
 }
 
 .menu-list .dish{
-    width: 307px;
+    width: 340px;
     float:  left;
-    height: 340px;
-    padding: 130px 20px 20px 20px;
+    height: 342px;
+    padding: 140px 20px 10px 20px;
     list-style: none;
     margin: 0;
     page-break-inside:avoid;
+}
+
+.description {
+   
+    width: 322px;
+    padding: 0 auto;
 }
 
 .dish .logo {
