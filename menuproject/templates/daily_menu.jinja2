@@ -17,20 +17,25 @@
     <body class="display">
       <div class="menu-display">
       	<ul class="menu-list">
-  	    {% for menuItem in menuItems %}
+  	    {% for menu_item in menu_items %}
 	  <li class="dish">
-	    <div class="dish-title">{{menuItem.name}}</div>
-
-	    <div class="description">{{menuItem.description}}</div>
-
-	    {% set menuRestriction = menuItem.restriction %}
-            {% if menuRestriction %}
-	    {% set restrictions = menuItem.restriction %}
-	    {% for restriction in restrictions.split(' ') %}
-	    {% set imageName = "/static/i/" + restriction + ".png" %}
-            <img src={{imageName}} alt={{restriction}} width="20" height="20" />
-	    {% endfor %}
+	    <div class="dish-title">{{menu_item.name.decode('utf8')}}</div> 
+	    {% if menu_item.description.decode('utf8') %} 
+	    <div class="description">
+	      {% for item_line in menu_item.description.decode('utf8').split('\n') %}
+	      {{item_line}}<br/>
+	      {% endfor %}
+	    </div>
 	    {% endif %}
+	    <div class="allergen-images">
+            {% set menu_allergens = allergens[loop.index-1] %}
+	    {% for restriction in menu_allergens %}
+	      {% set imageName = "/static/i/" + restriction + ".png" %}
+            <img src={{imageName}} alt="{{restriction}}" title="{{restriction}}" width="20" height="20" />
+	    {% endfor %}
+	    <br class="clear" />
+	    </div>
+	 
 	  </li>
 	    {% endfor %}
 
