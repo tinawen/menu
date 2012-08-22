@@ -45,7 +45,9 @@
 
 	<script src='/static/j/jquery.js'></script>
 	<script>
-
+	  $(document).ready(function(){
+	  setInterval("location.reload(true)", 60000);
+	  });
 	  // Modal Dialogues
 	  $modals = $('.modal-wrap, .modal');
 	  $('.add-dish, .cancel').on('click', function(){
