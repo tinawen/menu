@@ -31,7 +31,7 @@
             {% set menu_allergens = allergens[loop.index-1] %}
 	    {% for restriction in menu_allergens %}
 	      {% set imageName = "/static/i/" + restriction + ".png" %}
-            <img src={{imageName}} alt="{{restriction}}" title="{{restriction}}" width="20" height="20" />
+            <img src={{imageName}} class="dish-allergen"  alt="{{restriction}}" title="{{restriction}}" width="20" height="20" />
 	    {% endfor %}
 	    <br class="clear" />
 	    </div>
@@ -40,7 +40,7 @@
 	    {% endfor %}
 
 	</ul>
-<!--	<input type=submit id=additem text="Add">  -->
+<!--	<input type=submit id=additem text="Add"> -->
 	</div>
 
 	<script src='/static/j/jquery.js'></script>
@@ -48,6 +48,7 @@
 	  $(document).ready(function(){
 	  setInterval("location.reload(true)", 60000);
 	  });
+
 	  // Modal Dialogues
 	  $modals = $('.modal-wrap, .modal');
 	  $('.add-dish, .cancel').on('click', function(){
@@ -73,14 +74,33 @@
 	  var $visible = $dishes.filter(':visible')
 	  var count = $visible.length
 	  console.log(count)
+	 
+
+	  var font_size_array = new Array (
+	  "40px",
+	  "30px",
+	  "30px",
+	  "30px",
+	  "22px",
+	  "22px",
+	  "22px",
+	  "22px",
+	  "22px",
+	  "18px"
+	  )
+	  $("body").css("font-size", font_size_array[count-1]);
+	 
 	  var all_breakpoints = new Array(
 	  [],
 	  [],
-	  [],
+	  [2],
+	  [3],
 	  [3],
 	  [4],
-	  [3],
-	  [2,4]
+	  [3,5],
+	  [3,6],
+	  [4, 7],
+	  [4, 7]
 	  )
 
 	  var breakpoints = all_breakpoints[count-1];

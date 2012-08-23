@@ -228,6 +228,9 @@ def create_menu(request):
 def daily_menu(request):
     now = datetime.datetime.now()
     today = now.strftime('%Y-%m-%d')
+   # before = now - timedelta(days = 1)
+  #  yesterday = before.strftime('%Y-%m-%d')
+ #   today = yesterday
     meal_filter = 1
     if now.hour < 10:
         meal_filter = 1

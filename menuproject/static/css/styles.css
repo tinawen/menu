@@ -718,7 +718,9 @@ li.year a:hover {
   body.display .description {
     font-size: 1.2em;
   }
+  body.display .dish-allergen {
+      width: 1.2em;
+      height: 1.2em;
+  }
 }
-
-
 
