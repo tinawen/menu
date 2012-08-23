@@ -229,9 +229,9 @@ def daily_menu(request):
     now = datetime.datetime.now()
     today = now.strftime('%Y-%m-%d')
     meal_filter = 1
-    if now.hour < 11:
+    if now.hour < 10:
         meal_filter = 1
-    elif 11 <= now.hour < 17:
+    elif 10 <= now.hour < 17:
         meal_filter = 2
     else:
         meal_filter = 3
