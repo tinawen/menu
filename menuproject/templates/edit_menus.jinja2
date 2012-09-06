@@ -2,12 +2,14 @@
 {% block head %}
   {{super() }}
     <a class="add-dish button" href="#">Add a Menu</a>
+    
 {% endblock %}
 
 {% block addMenu %}
   <form class="adding adding-menu modal" onsubmit="return checkBeforeSubmit()" action="../create_menu">
       <h2>Add a Menu</h2>
       <a class="cancel" href="#">cancel</a>
+      
       <link href="/static/css/jquery-ui.css" rel="stylesheet" type="text/css"/>
       <script src="/static/j/jquery-ui.min.js"></script>
   
@@ -40,7 +42,7 @@
       	      var wasSubmitted = false;
 				  function checkBeforeSubmit() {
 				  if (!wasSubmitted) {
-				  wasSubmitted = true;
+																  wasSubmitted = true;
 				  return wasSubmitted;
 				  }
 				  return false;
@@ -55,6 +57,7 @@
 	      $('.modal-wrap').toggleClass('display');
 	            $('.modal').toggleClass('display');
       });
+     
       </script>
 
 

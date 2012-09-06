@@ -7,3 +7,4 @@ MenuProject.egg-info/*
 dist/*
 .hg/*
 menu_backup/*
+*.ini

@@ -66,23 +66,22 @@
 
     {% block addMenu %}
     {% endblock %}
-
-    
-    
+        
   </div>
   
   <script>
-      $('.picker').on('click', function() {
-      $('.nav').toggleClass('display');
+    $('.picker').on('click', function() {
+    $('.nav').toggleClass('display');
     });
-
-$(document).keyup(function(event) {
+    
+    $(document).keyup(function(event) {
     if(event.which === 27) {
-  $('.modal').removeClass('display');
-  $('.modal-wrap').removeClass('display');
-      $('.nav').removeClass('display');
-  }
-});
+    $('.modal').removeClass('display');
+    $('.modal-wrap').removeClass('display');
+    $('.nav').removeClass('display');
+    }
+    });
+    
   </script>
   </body>
 </html>

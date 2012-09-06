@@ -27,6 +27,7 @@ def main(global_config, **settings):
     config.add_route('update_menus', '/update_menus/{menu_id}')
     config.add_route('update_menu_month', '/edit/{menu_month}')
     config.include('pyramid_jinja2')
+    config.include('pyramid_mailer')
     config.scan()
     return config.make_wsgi_app()
 
