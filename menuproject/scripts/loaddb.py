@@ -38,7 +38,7 @@ def main(argv=sys.argv):
     DBSession.configure(bind=engine)
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
-    delete_all()
+#    delete_all()
     with transaction.manager:
         f = open("./db_backup.txt", 'r');
         serialized_data = pickle.load(f)
@@ -58,7 +58,7 @@ def main(argv=sys.argv):
         menus = loads(serialized_menus, Base.metadata, DBSession)
         for menu in menus:
             DBSession.merge(menu)
-            update_menu_on_google_calendar(menu)
+ #           update_menu_on_google_calendar(menu)
 
 
 
