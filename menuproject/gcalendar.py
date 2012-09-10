@@ -119,7 +119,7 @@ def update_menu_on_google_calendar(menu):
             'end': {
                     'dateTime': str(menu.date) + 'T' + end_time + ':00:00.000-07:00'
                 },
-            'description': get_menu_desc(menu),
+            'description': u'%s', get_menu_desc(menu),
             }
 
             created_event = service.events().insert(calendarId=data["tuckshop_calendar_id"], body=event).execute()
