@@ -23,7 +23,7 @@
 	      <div class="dish-title">
 		{% if menu_item.healthy %}
 		{% set healthy_factor = menu_item.healthy %}
-		{% set healthyImageName = "/static/i/healthy" ~ healthy_factor ~ ".png" %}
+		{% set healthyImageName = "/static/i/healthy" ~ healthy_factor ~ "_print.png" %}
 		<img src={{healthyImageName}} class="dish-allergen" width="20" height="20" />
 		{% endif %}
 		{{menu_item.name.decode('utf8')}}</div> 
