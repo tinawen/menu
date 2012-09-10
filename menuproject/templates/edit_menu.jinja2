@@ -25,6 +25,7 @@
 	<a class="back button" href="/edit">Back to Menus</a>
       </div>
       {% set all_allergens = "Shellfish", "Nuts", "Dairy", "Spicy", "Vegan", "Gluten-free" %}
+      {% set healthy = "Healthy", "Moderate", "Unhealthy" %}
       <div class="menu">
 	<ul id="sortable" class="menu-list">
 	  {% for menu_item in menu_items %}
@@ -42,6 +43,19 @@
 		 {% endif %}
 		  <label class="check-label" for="city">{{allergen}}</label>
 		  {% endfor %}
+		  <div align="center"><br>
+		      {% for healthy_level in healthy %}
+			{% if menu_item.healthy == loop.index %}
+		      <input type="radio" class="healthy-selection" menuItemId="{{menu_item.id}}" value="{{loop.index}}" name={{menu_item.id}} id={{menu_item.id}} checked></input>
+		      {% else %}
+		      <input type="radio" class="healthy-selection" menuItemId="{{menu_item.id}}" value="{{loop.index}}" name={{menu_item.id}} id={{menu_item.id}}></input>
+			    {% endif %}
+			  <label for="{{healthy_level}}" class="check-label">{{healthy_level}}</label>
+			{% endfor %}
+		</div>
+		
+
+
 		<br class="clear" />
 	      </div>
 	      <div class="actions"><a href="#" class="move circle-button">Move</a><a href="/delete_menu/{{menu_item.id}}" class="delete circle-button">Delete</a></div>
@@ -51,6 +65,10 @@
 	    {% endfor %}
 	  </ul>
 	</div>			  
+	      {% if not menu.sent %}
+	      <a class="publish button" href="#">I'm DONE!</a>
+	      {% endif %}
+
 		<div class="modal-wrap">    
 		  <form class="adding modal" onsubmit="return checkBeforeSubmit()" action="../create_menu_item/{{menu.id}}">
 		    <h2>Add a Dish</h2>
@@ -68,8 +86,16 @@
 			      <label class="check-label" for="checkbox">{{allergen}}</label>
 			      </div>
 			    {% endfor %}
+			 <label>Health Factor</label>
+			 <div align="center"><br>
+			     {% for healthy_level in healthy %}
+			     <div class="healthy_level">
+			       <input type="radio" class="checkbox" name="healthy" id="{{healthy_level}}" value="{{loop.index}}">
+				 <label for="{{healthy_level}}" class="check-label">{{healthy_level}}</label>
+			       </div>
+			       {% endfor %}
+			     </div>
 			</div>
-
 				  <br>
 				    <button type="submit" class="button floatright" name="submit">Add</buttton>
 				  </form>
@@ -127,7 +153,7 @@
 				  })
 				  })
 
-				  $('#description').live('change', function() {
+				  $('#description').change(function() {
 				  var itemValue = escape($(this).val());
 				  $.ajax({
 				  type: "POST",
@@ -152,8 +178,26 @@
 				  })
 				  }
 				  })
-				  
+
+				  $('.healthy-selection').live('change', function() {
+				  $.ajax({
+				  type:"POST",
+				  url: "/update_menu_item_healthy/" + $(this)[0].getAttribute('menuItemId'),
+				  data: "healthy=" + $(this).val()
+				  })				  
+				  })
+				  $('.publish').click(function(){
+				  $.ajax({
+				  type:"POST",
+				  url: "/publish/" + {{menu.id}},
+				  success: function(data){
+				  console.log(eval(data));
+				  $('.publish').hide();
+				  }
+				  })
+				  })
 				  });
+
 				  $(function() {
 				  $("#sortable").sortable({
 				  update: function(event, ui) {

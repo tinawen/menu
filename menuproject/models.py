@@ -3,6 +3,7 @@ from sqlalchemy import (
     Integer,
     Text,
     Date,
+    Boolean,
     )
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -23,11 +24,13 @@ class MenuItem(Base):
     name = Column(Text)
     description = Column(Text)
     menu_id = Column(Integer)
+    healthy = Column(Integer)
 
-    def __init__(self, name, description, menu_id):
+    def __init__(self, name, description, menu_id, healthy):
         self.name = name
         self.description = description
         self.menu_id = menu_id
+        self.healthy = healthy
         
 class Menu(Base):
     __tablename__ = 'menus'
@@ -36,12 +39,14 @@ class Menu(Base):
     date = Column(Date)
     time_sort_key = Column(Integer)
     menus = Column(Text)
+    sent = Column(Boolean)
 
-    def __init__(self, name, date, time_sort_key, menus):
+    def __init__(self, name, date, time_sort_key, menus, sent):
         self.name = name
         self.date = date
         self.time_sort_key = time_sort_key
         self.menus = menus
+        self.sent = sent
 
 class Allergen(Base):
     __tablename__ = 'allergens'

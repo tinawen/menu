@@ -13,7 +13,19 @@
   
   <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
   <script src='/static/j/jquery.js'></script>
- 
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34677345-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+  </script>
   
 </head>
 <body class="index">
@@ -24,18 +36,15 @@
     {% endblock %}
     </div>
   
-  {% set months = "July", "August", "September", "October", "November", "December" %}
-  {% set selectedMonth = months[url-7] %}
  <div class="head">
-    <a class="picker button" href="#">{{selectedMonth}} 2012</a>
+    <a class="picker button" href="#">{{selected_month}}</a>
 
     <ul class="nav">
     <div class="beak"><img src="/static/i/beak.png" alt="beak" width="23" height="8" /></div>
     <span>
-      <li class="year"><a href="#">2012</a></li>
       {% block select_month %}
       {% for month in months %}
-      <li><a href="/view_menus/{{loop.index+6}}">{{month}}</a></li>
+      <li><a href="/view_menus/{{loop.index-1}}">{{month}}</a></li>
       {% endfor %}
       {% endblock %}
       </span>

@@ -7,8 +7,14 @@ import datetime
 import time
 import json
 import urllib
+import calendar
+import operator
+from gcalendar import get_menu_name
+from gcalendar import get_menu_desc
 from gcalendar import update_menu_on_google_calendar
 from datetime import timedelta
+from sqlalchemy import distinct
+from sqlalchemy import extract
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 
@@ -21,20 +27,35 @@ from .models import (
 
 MAIL_SECRETS = '/home/tina/mail_secrets.json'
 
-def send_email(request):
-    mailer = get_mailer(request)
-    
-    json_data = open(MAIL_SECRETS)
-    data = json.load(json_data)
-    json_data.close()
+def refresh_menu(menu_id):
+    menu = DBSession.query(Menu).filter(Menu.id==menu_id).one()
+    menu_items = DBSession.query(MenuItem).filter(MenuItem.menu_id==menu.id).all()
+    allergens = []
+    for menu_item in menu_items:
+        allergen_array = DBSession.query(Allergen).filter(Allergen.menu_item_id==menu_item.id).all()
+        allergens.append([a.allergen for a in allergen_array])
+    return dict(menu_items=menu_items, allergens=allergens, menu=menu)
 
-    message = Message(subject="Lobster is served!",
-                  sender=data["sender"],
-                  recipients=[data["recipient"]],
-                  body="Lobster is served today")
-    print 'trying to send email to %r' % data["recipient"]
-    mailer.send_immediately(message, fail_silently=False)
+@view_config(route_name='publish', renderer='string')
+def publish(request):
+    menuQuery = DBSession.query(Menu).filter(Menu.id==request.matchdict['menu_id'])
+    menu = menuQuery.one()
 
+    if not menu.sent:
+        mailer = get_mailer(request)
+        json_data = open(MAIL_SECRETS)
+        data = json.load(json_data)
+        json_data.close()
+
+        message = Message(subject=get_menu_name(menu),
+                          sender=data["sender"],
+                          recipients=[data["recipient"]],
+                          body=get_menu_desc(menu))
+        print 'trying to send email to %r' % data["recipient"]
+        mailer.send_immediately(message, fail_silently=False)
+        menuQuery.update({"sent":True}, synchronize_session=False)
+    return json.dumps("Sent")    
+ 
 def migrate(request):
     menu_items = DBSession.query(MenuItem).all()
     for menu_item in menu_items:
@@ -50,23 +71,46 @@ def migrate(request):
 
 @view_config(route_name='view_menus_init', renderer='templates/view_menus.jinja2')
 def view_menus_init(request):
-    month = datetime.datetime.now().strftime("%m")
-    url = request.route_url('view_menus', menu_month=month)
-    return HTTPFound(location=url)
+    return view_menus(request)
+
+def convert_to_month_string (month, year):
+    return str(calendar.month_name[month]) + ' ' + str(year)
+   
+def build_months_dict():
+    months_dict = {}
+    distinct_months = DBSession.query(extract('month', Menu.date), extract('year', Menu.date)).distinct().all()
+    for distinct_month in distinct_months:
+        months_dict[int(distinct_month[0]), int(distinct_month[1])] = convert_to_month_string(int(distinct_month[0]), int(distinct_month[1]))
+    return months_dict
+
+def build_months_menu():
+    months_dict = build_months_dict()
+    sorted_months = sorted(months_dict.iteritems(), key=operator.itemgetter(0))
+    sorted_months = [y for x, y in sorted_months]
+    return sorted_months
 
 @view_config(route_name='view_menus', renderer='templates/view_menus.jinja2')
 def view_menus(request):
     today = datetime.datetime.now()
     year = today.strftime("%Y")
+    
+    new_month = int(today.strftime("%m"))
+    new_year = year
+    sorted_months = build_months_menu()
+    print 'sorted month is: ', sorted_months
     if 'menu_month' in request.matchdict:
-        new_month = request.matchdict['menu_month']
-    else:
-        new_month = today.strftime("%m")
+        print 'index is ', int(request.matchdict['menu_month'])
+        month_string = sorted_months[int(request.matchdict['menu_month'])]
+        months_dict = build_months_dict()
+        for key, value in months_dict.iteritems():
+            if value == month_string:
+                new_month = key[0]
+                new_year = key[1]
 
     print 'new_month is %r'%new_month
-    start_date = datetime.datetime(int(year), int(new_month), 1)
-    end_date = datetime.datetime(int(year), int(new_month)+1, 1)
-
+    print 'new_year is %r'%new_year
+    start_date = datetime.datetime(int(new_year), int(new_month), 1)
+    end_date = datetime.datetime(int(new_year), int(new_month)+1, 1)
     week_starts = []
     weekly_menus = []
     week_end = end_date
@@ -84,7 +128,13 @@ def view_menus(request):
         week_end = week_end-timedelta(days=7)
         if week_start <= start_date:
             break
-    return dict(menus=weekly_menus, week_starts = week_starts, url=int(new_month))
+
+        month_string = convert_to_month_string(int(new_month), int(new_year))
+        print 'new month is ', month_string
+
+        month = sorted_months.index(month_string)
+        print 'month is ', month
+    return dict(menus=weekly_menus, week_starts = week_starts, selected_month=month_string, months=sorted_months)
 
 @view_config(route_name='edit_menu', renderer='templates/edit_menu.jinja2')
 def edit_menu(request):
@@ -105,16 +155,14 @@ def edit_menus(request):
 
 @view_config(route_name='edit_menus_init', renderer='templates/edit_menus.jinja2')
 def edit_menus_init(request):
-    month = datetime.datetime.now().strftime("%m")
-    url = request.route_url('edit_menus', menu_month=month)
-    return HTTPFound(location=url)
+    return edit_menus(request)
 
 @view_config(route_name='create_menu_item', renderer='templates/edit_menu.jinja2')
 def create_menu_item(request):
-    new_menu_item = MenuItem(name=request.params['name'].encode('utf8'), description=request.params['description'].encode('utf8'), menu_id=request.matchdict['menu_id'])
+    new_menu_item = MenuItem(name=request.params['name'].encode('utf8'), description=request.params['description'].encode('utf8'), menu_id=request.matchdict['menu_id'], healthy=int(request.params['healthy']))
     DBSession.add(new_menu_item)
     print 'adding menu_item, desc is %r' % request.params['description'].encode('utf8')
-    menu_item = DBSession.query(MenuItem).filter(MenuItem.name==request.params['name'].encode('utf8')).filter(MenuItem.description==request.params['description'].encode('utf8')).filter(MenuItem.menu_id==request.matchdict['menu_id']).one()
+    menu_item = DBSession.query(MenuItem).filter(MenuItem.name==request.params['name'].encode('utf8')).filter(MenuItem.description==request.params['description'].encode('utf8')).filter(MenuItem.menu_id==request.matchdict['menu_id']).filter(MenuItem.healthy==request.params['healthy']).one()
     allergens = ["Shellfish", "Nuts", "Dairy", "Spicy", "Vegan", "Gluten-free"]
     for allergen in allergens:
         if allergen in request.params:
@@ -171,9 +219,6 @@ def update_menu_item_name(request):
     menuItem = DBSession.query(MenuItem).filter(MenuItem.id==request.matchdict['menuItem_id'])
     old_name = menuItem.one().name
     new_name = urllib.unquote(request.json_body)
-    print "new name is %r" % new_name
-    if "lobster" in new_name:
-        send_email(request)
     menuItem.update({"name":new_name.encode('utf8')})
     menuQuery = DBSession.query(Menu).filter(Menu.id==menuItem.one().menu_id)
     menu = menuQuery.one()
@@ -191,14 +236,9 @@ def update_menu_item_desc(request):
     new_desc = urllib.unquote(request.json_body).encode('utf8') 
     print 'new_desc is %r' % new_desc
     menuItem.update({"description":new_desc})
-    menu = DBSession.query(Menu).filter(Menu.id==menuItem.one().menu_id).one()
-    menu_items = DBSession.query(MenuItem).filter(MenuItem.menu_id==menu.id).all()
-    allergens = []
-    for menu_item in menu_items:
-        allergen_array = DBSession.query(Allergen).filter(Allergen.menu_item_id==menu_item.id).all()
-        allergens.append([a.allergen for a in allergen_array])
+    menu = DBSession.query(Menu).filter(Menu.id==menu_id).one()
     update_menu_on_google_calendar(menu)
-    return dict(menu_items=menu_items, allergens=allergens, menu=menu)
+    return refresh_menu(menuItem.one().menu_id)
 
 @view_config(route_name='update_menu_item_allergen', renderer='templates/edit_menu.jinja2')
 def update_menu_item_allergen(request):
@@ -225,6 +265,13 @@ def update_menu_item_allergen(request):
     update_menu_on_google_calendar(menu)
     return dict(menu_items=menu_items, allergens=allergens, menu=menu)
 
+
+@view_config(route_name='update_menu_item_healthy', renderer='json')
+def update_menu_item_healthy(request):
+    menuItem = DBSession.query(MenuItem).filter(MenuItem.id==request.matchdict['menuItem_id'])
+    menuItem.update({"healthy":int(request.params['healthy'])})
+    return dict()
+
 @view_config(route_name='update_menus', renderer='templates/edit_menu.jinja2')
 def update_menus(request):
     menu = DBSession.query(Menu).filter(Menu.id==request.matchdict['menu_id'])
@@ -248,7 +295,7 @@ def update_menus_name(request):
 def create_menu(request):
     menu = DBSession.query(Menu).filter(Menu.date==request.params['date']).filter(Menu.time_sort_key==int(request.params['time'])).first()
     if menu is None:
-        menu = Menu(name='', date=request.params['date'], time_sort_key=request.params['time'], menus='')
+        menu = Menu(name='', date=request.params['date'], time_sort_key=request.params['time'], menus='', sent=False)
         DBSession.add(menu)
         menu = DBSession.query(Menu).filter(Menu.name=='').filter(Menu.date==request.params['date']).filter(Menu.time_sort_key==request.params['time']).one()
     url = request.route_url('edit_menu', menu_id=menu.id)

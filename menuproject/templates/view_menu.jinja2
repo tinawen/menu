@@ -13,6 +13,17 @@
       	<link rel="stylesheet" type="text/css" href="/static/css/styles.css" media="all"> 
       <link rel="stylesheet" type="text/css" href="/static/css/print.css" media="print">
       <script src='/static/j/jquery.js'></script>
+      <script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-34677345-1']);
+	_gaq.push(['_trackPageview']);
+	
+	(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+      </script>
     </head>
     <body>
       <div class="header">
@@ -27,7 +38,14 @@
 
 	  <li class="dish">
             <img src="/static/i/logo.png" class="logo"/>
-	    <div class="dish-title">{{menu_item.name.decode('utf8')}}</div> 
+	    <div class="dish-title">
+	    {% if menu_item.healthy %}
+	      {% set healthy_factor = menu_item.healthy %}
+	      {% set healthyImageName = "/static/i/healthy" ~ healthy_factor ~ ".png" %}
+              <img src={{healthyImageName}} width="20" height="20" center/>
+	    {% endif %}
+	      {{menu_item.name.decode('utf8')}}
+	      </div>
 	    {% if menu_item.description.decode('utf8') %} 
 	    <div class="description">
 	      {% for item_line in menu_item.description.decode('utf8').split('\n') %}
@@ -36,6 +54,7 @@
 	    </div>
 	    {% endif %}
 	    <div class="allergen-images">
+	      
             {% set menu_allergens = allergens[loop.index-1] %}
 	    {% for restriction in menu_allergens %}
 	      {% set imageName = "/static/i/" + restriction + ".png" %}

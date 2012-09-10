@@ -65,7 +65,7 @@
 
       {% block select_month %}
       {% for month in months %}
-      <li><a href="/edit_menus/{{loop.index+6}}">{{month}}</a></li>
+      <li><a href="/edit_menus/{{loop.index-1}}">{{month}}</a></li>
       {% endfor %}
       {% endblock %}
 
