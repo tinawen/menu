@@ -19,6 +19,11 @@ from .models import (
 CALENDAR_ID = '/home/tina/client_secrets.json'
 CLIENT_SECRETS = '/home/tina/credentials.dat'
 
+health_color = ['\033[92m', '\033[93m', '\033[91m']
+ 
+def color(text, color):
+    return u"%s%s%s" % (color, text, '\033[0m')
+
 def get_menu_name(menu):
     time = int(menu.time_sort_key)
     if time == 1:
@@ -33,8 +38,6 @@ def get_menu_name(menu):
         menu_name = menu_name + ': ' + menu.name
     return menu_name
 
-healthy_array = ['healthy', 'moderate', 'unhealthy']
-
 def get_menu_desc(menu):
     desc = '' 
     if len(menu.menus) < 1:
@@ -43,12 +46,14 @@ def get_menu_desc(menu):
         menu_item = DBSession.query(MenuItem).filter(MenuItem.id==menu_item_id).one()
         allergens = DBSession.query(Allergen).filter(Allergen.menu_item_id==menu_item.id).all()
         allergen_string = ', '.join([a.allergen for a in allergens])
-        desc = desc + '\n' + menu_item.name;
-        
+        desc = '\n' + desc
         if menu_item.healthy:
-            desc = desc + ' (' + healthy_array[menu_item.healthy-1] + ')' + '\n';
-        else: 
-            desc = desc + '\n'
+            color_icon = color(u'\u2764', health_color[menu_item.healthy-1])
+            desc = desc + color_icon + ' ' 
+        
+        desc = desc + menu_item.name;
+        
+        desc = desc + '\n'
         if len(menu_item.description):
             desc = desc + menu_item.description + '\n'
         if len(allergen_string):
@@ -118,7 +123,6 @@ def update_menu_on_google_calendar(menu):
             }
 
             created_event = service.events().insert(calendarId=data["tuckshop_calendar_id"], body=event).execute()
-
     except AccessTokenRefreshError:
         #just added
         print 'refreshing'
