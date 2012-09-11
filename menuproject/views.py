@@ -232,11 +232,12 @@ def update_menu_item_name(request):
 @view_config(route_name='update_menu_item_desc', renderer='templates/edit_menu.jinja2')
 def update_menu_item_desc(request):
     print 'updating menu item desc'
-    menuItem = DBSession.query(MenuItem).filter(MenuItem.id==request.matchdict['menuItem_id'])
+    menu_item_id = request.matchdict['menuItem_id']
+    menuItem = DBSession.query(MenuItem).filter(MenuItem.id==menu_item_id)
     new_desc = urllib.unquote(request.json_body).encode('utf8') 
     print 'new_desc is %r' % new_desc
     menuItem.update({"description":new_desc})
-    menu = DBSession.query(Menu).filter(Menu.id==menu_id).one()
+    menu = DBSession.query(Menu).filter(Menu.id==menuItem.one().menu_id).one()
     update_menu_on_google_calendar(menu)
     return refresh_menu(menuItem.one().menu_id)
 
