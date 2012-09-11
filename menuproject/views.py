@@ -18,7 +18,7 @@ from sqlalchemy import extract
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 
-from .models import (
+from models import (
     DBSession,
     MenuItem,
     Menu,
@@ -40,7 +40,6 @@ def refresh_menu(menu_id):
 def publish(request):
     menuQuery = DBSession.query(Menu).filter(Menu.id==request.matchdict['menu_id'])
     menu = menuQuery.one()
-
     if not menu.sent:
         mailer = get_mailer(request)
         json_data = open(MAIL_SECRETS)
@@ -50,12 +49,12 @@ def publish(request):
         message = Message(subject=get_menu_name(menu),
                           sender=data["sender"],
                           recipients=[data["recipient"]],
-                          body=get_menu_desc(menu))
+                          body=get_menu_desc(menu, False))
         print 'trying to send email to %r' % data["recipient"]
         mailer.send_immediately(message, fail_silently=False)
         menuQuery.update({"sent":True}, synchronize_session=False)
     return json.dumps("Sent")    
- 
+
 def migrate(request):
     menu_items = DBSession.query(MenuItem).all()
     for menu_item in menu_items:

@@ -9,7 +9,7 @@ from oauth2client.client import AccessTokenRefreshError
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.tools import run
 
-from .models import (
+from models import (
     DBSession,
     MenuItem,
     Menu,
@@ -35,7 +35,7 @@ def get_menu_name(menu):
         menu_name = menu_name + ': ' + menu.name
     return menu_name
 
-def get_menu_desc(menu):
+def get_menu_desc(menu, for_calendar):
     desc = '' 
     if len(menu.menus) < 1:
         return ''
@@ -46,7 +46,10 @@ def get_menu_desc(menu):
         desc = '\n' + desc
         desc = desc + menu_item.name;
         if menu_item.healthy:
-            desc = desc + '\n' + u'\u2764' + health_name[menu_item.healthy-1] + u'\u2764 '
+            if for_calendar:
+                desc = desc + '\n' + u'\u2764' + health_name[menu_item.healthy-1] + u'\u2764 '
+            else:
+                desc = desc + '\n' + '(' + health_name[menu_item.healthy-1] + ') '
         
         desc = desc + '\n'
         if len(menu_item.description):
@@ -97,7 +100,7 @@ def update_menu_on_google_calendar(menu):
 
         if 'items' in events and events['items'] and len(events['items']) == 1:
             event = events['items'][0]
-            desc = get_menu_desc(menu)
+            desc = get_menu_desc(menu, True)
             event['summary'] = get_menu_name(menu)
             event['description'] = desc
             updated_event = service.events().update(calendarId=data["tuckshop_calendar_id"], eventId=event['id'], body=event).execute()
@@ -105,7 +108,7 @@ def update_menu_on_google_calendar(menu):
        
         else:
             print 'creating new event'
-            menu_description = u"%s", get_menu_desc(menu)
+            menu_description = u"%s", get_menu_desc(menu, True)
             event = {
             'summary': get_menu_name(menu),
             'location': 'Tuckshop',
