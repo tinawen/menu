@@ -44,7 +44,7 @@ def get_menu_desc(menu, for_calendar):
         allergens = DBSession.query(Allergen).filter(Allergen.menu_item_id==menu_item.id).all()
         allergen_string = ', '.join([a.allergen for a in allergens])
         desc = '\n' + desc
-        desc = desc + menu_item.name;
+        desc = desc + menu_item.name.decode('utf8');
         if menu_item.healthy:
             if for_calendar:
                 desc = desc + '\n' + u'\u2764' + health_name[menu_item.healthy-1] + u'\u2764 '
@@ -52,8 +52,8 @@ def get_menu_desc(menu, for_calendar):
                 desc = desc + '\n' + '(' + health_name[menu_item.healthy-1] + ') '
         
         desc = desc + '\n'
-        if len(menu_item.description):
-            desc = desc + menu_item.description + '\n'
+        if len(menu_item.description.decode('utf8')):
+            desc = desc + menu_item.description.decode('utf8') + '\n'
         if len(allergen_string):
             desc = desc + '(' + allergen_string + ')\n\n' 
     return desc.strip('\n')
