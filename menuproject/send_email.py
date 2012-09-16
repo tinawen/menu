@@ -52,8 +52,8 @@ if len(menu_query.all()) == 1:
 
         msg['From'] = data["sender"]
         msg['To'] = data["recipient"]
-        msg['Subject'] = get_menu_name(menu)
-        msg.attach(MIMEText(get_menu_desc(menu, False)))
+        msg['Subject'] = get_menu_name(menu).encode('utf8')
+        msg.attach(MIMEText(get_menu_desc(menu, False).encode('utf8')))
         
         mailServer = smtplib.SMTP("smtp.gmail.com", 587)
         mailServer.ehlo()
