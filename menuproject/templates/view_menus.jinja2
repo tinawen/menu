@@ -26,19 +26,19 @@
   })();
 
   </script>
-  
 </head>
 <body class="index">
   
   <div class="header">
     <h1>All Menus</h1>
     {% block head %}
+     <a class="add-dish button long" href="https://www.google.com/calendar/render?cid=dropbox.com_a4mvuefvs56vpn3k0780pfh4t4@group.calendar.google.com">Import to Google Calendar</a>
+     <a class="add-dish button feedback" id="submit-feedback" href="#">Website Feedback</a>
     {% endblock %}
     </div>
   
  <div class="head">
     <a class="picker button" href="#">{{selected_month}}</a>
-
     <ul class="nav">
     <div class="beak"><img src="/static/i/beak.png" alt="beak" width="23" height="8" /></div>
     <span>
@@ -78,6 +78,12 @@
         
   </div>
   
+  <div class="feedback-form">
+    <div class="feedbackf">
+    <a class="cancel" href="#">cancel</a>
+    <iframe src="https://docs.google.com/a/dropbox.com/spreadsheet/embeddedform?formkey=dHBfdGlPUHBoNUN1ZjhGYnJXZV9PclE6MQ" width="760" height="625" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+    </div>
+   </div>
   <script>
     $('.picker').on('click', function() {
     $('.nav').toggleClass('display');
@@ -90,7 +96,15 @@
     $('.nav').removeClass('display');
     }
     });
-    
+    $('#submit-feedback').on('click', function() {
+    $('.feedback-form').toggleClass('display');
+    $('.feedbackf').toggleClass('display');
+    });
+
+    $('.cancel').on('click', function() {
+    $('.feedback-form').toggleClass('display');
+    $('.feedbackf').toggleClass('display');
+    });
   </script>
   </body>
 </html>

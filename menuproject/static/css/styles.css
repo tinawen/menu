@@ -359,6 +359,9 @@ border: 0;
   right: 20px;
   z-index: 99999;
 }
+.button.add-dish.long {
+    width:170px;
+}
 .circle-button {
   width: 50px;
   height: 0px;
@@ -469,6 +472,66 @@ h2 {
   margin: 0;
   font-size: 20px;
   font-weight: normal;
+}
+.feedback-form {
+  position: fixed;
+  height: 0%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+  background: rgba(250,250,250,0.8);
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  -ms-transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
+  z-index: 99999999;
+}
+.feedback-form.display {
+  height: 100%;
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+}
+.feedbackf {
+  width: 760px;
+  padding: 0px;
+  border: 1px solid #999;
+  border-top: 1px solid #aaa;
+  -webkit-box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  position: absolute;
+  height: 630px;
+  top: 5550px;
+  background: #fff;
+  left: 50%;
+  margin-left: -350px;
+  margin-top: -230px;
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  -ms-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  z-index: 999999999;
+  overflow: hidden;
+  opacity: 0;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  filter: alpha(opacity=0);
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  padding: 35px;
+}
+.feedbackf.display {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+  top: 35%;
 }
 .modal-wrap {
   position: fixed;
@@ -705,11 +768,9 @@ li.year a:hover {
 .dish .logo {
     display:none;
 }
-.publish{
-    position: relative;
-    left:850px;
-    bottom: 150px;
-    font-weight: bold;
+.add-dish.button.feedback{
+   right:200px;
+   width:120px;
 }
 
 @media only screen and (min-width: 400px) {
