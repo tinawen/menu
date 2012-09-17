@@ -9,7 +9,10 @@ def main():
         if f:
             pid = f.read()
             if pid:
-                os.kill(int(pid), signal.SIGHUP)
+                try:
+                    os.kill(int(pid), signal.SIGHUP)
+                except:
+                    print "process not running"
         os.chdir("./menuproject/scripts/")
         os.system("dump_MenuProject_db ../../production.ini")
         os.chdir("../../")
