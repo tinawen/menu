@@ -10,7 +10,6 @@ import datetime
 import json
 import smtplib
 from gcalendar import get_menu_name
-from gcalendar import get_menu_desc
 from sqlalchemy import engine_from_config
 
 from pyramid.paster import (
@@ -20,6 +19,8 @@ from pyramid.paster import (
 from models import (
     DBSession,
     Menu,
+    MenuItem,
+    Allergen,
     )
 
 MAIL_SECRETS = '/home/tina/mail_secrets.json'
@@ -39,30 +40,78 @@ elif 10 <= now.hour < 14:
 else:
     meal_filter = 3
 
-menu_query = DBSession.query(Menu).filter(Menu.date == today).filter(Menu.time_sort_key == meal_filter)
+health_color = ['green', 'orange', 'red']
+
+menu_query = DBSession.query(Menu).filter(Menu.date==today).filter(Menu.time_sort_key==meal_filter)
 if len(menu_query.all()) == 1:
     menu = menu_query.one()
     if not menu.sent:
-        print "sending email"
-        json_data = open(MAIL_SECRETS)
-        data = json.load(json_data)
-        json_data.close()
-    
-        msg = MIMEMultipart()
+        if len(menu.menus) >= 1:
+            desc = "<div>"
+            for menu_item_id in menu.menus.split(' '):
+                menu_item = DBSession.query(MenuItem).filter(MenuItem.id==menu_item_id).one()
+                allergens = DBSession.query(Allergen).filter(Allergen.menu_item_id==menu_item.id).all()
+                allergen_string = ', '.join([a.allergen for a in allergens])
+                if menu_item.healthy:
+                    desc = desc + "<div style='display: block; text-align:center; font-size:15px; font-weight:bold; color:" + health_color[menu_item.healthy-1] + "'>" + "&hearts; " + "<font color=black>" + menu_item.name.decode('utf8') + '</font></div>'
+                else:
+                    desc = desc + "<div style='display: block; text-align:center; font-size:15px; font-weight:bold;'>" + menu_item.name.decode('utf8') + '</div>'
 
-        msg['From'] = data["sender"]
-        msg['To'] = data["recipient"]
-        msg['Subject'] = get_menu_name(menu).encode('utf8')
-        msg.attach(MIMEText(get_menu_desc(menu, False).encode('utf8')))
-        
-        mailServer = smtplib.SMTP("smtp.gmail.com", 587)
-        mailServer.ehlo()
-        mailServer.starttls()
-        mailServer.ehlo()
-        mailServer.login(data["sender"], "rianisawesome")
-        mailServer.sendmail(data["sender"], [data["recipient"]], msg.as_string())
-        mailServer.close()
-        menu_query.update({"sent":True}, synchronize_session=False)
+                if len(menu_item.description.decode('utf8')):
+                    desc = desc + "<div style='display: block; font-size:13px; text-align:center'>"
+                    desc = desc + menu_item.description.decode('utf8')
+                    desc = desc + '</div>'
+                if len(allergen_string):
+                    desc = desc + "<div style='display: block; font-size:11px; text-align:center'>"
+                    desc = desc + '(' + allergen_string + ')'
+                    desc = desc + '</div>'
+                desc = desc + '</div><br>'
+
+            json_data = open(MAIL_SECRETS)
+            data = json.load(json_data)
+            json_data.close()
+            msg = MIMEMultipart()
+
+            msg['From'] = data["sender"]
+            msg['To'] = data["recipient"]
+            msg['Subject'] = get_menu_name(menu).encode('utf8')
+            html_part1 = """
+<html>
+  <head></head>
+  <body>
+  <style>
+  * {font-family: Opensans, helvetica, sans-serif;
+       font-size: 15px;
+  }
+</style>
+<div style="display:block; font-size:17;text-align:center">
+    Today Tuckshop is serving:
+</div><br>
+     """
+            html_part2 ="""
+<div style="display:block; font-size:15; text-align:center">
+View the menu on <a href="http://food.corp.dropbox.com/menu/
+"""
+            html_part3 = """
+">food</a>
+</div>
+  </body>
+</html>
+"""
+            html = html_part1 + desc.encode('utf8') + html_part2 + str(menu.id) + html_part3
+            print "sending email:"
+            print html
+            msg_part  = MIMEText(html, 'html')
+            msg.attach(msg_part)
+            
+            mailServer = smtplib.SMTP("smtp.gmail.com", 587)
+            mailServer.ehlo()
+            mailServer.starttls()
+            mailServer.ehlo()
+            mailServer.login(data["sender"], "rianisawesome")
+            mailServer.sendmail(data["sender"], [data["recipient"]], msg.as_string())
+            mailServer.close()
+            menu_query.update({"sent":True}, synchronize_session=False)
 
 
     
