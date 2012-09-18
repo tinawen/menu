@@ -104,16 +104,10 @@ View the menu on <a href="http://food.corp.dropbox.com/menu/
             msg_part  = MIMEText(html, 'html')
             msg.attach(msg_part)
             
-            mailServer = smtplib.SMTP("smtp.gmail.com", 587)
-            mailServer.ehlo()
-            mailServer.starttls()
-            mailServer.ehlo()
-            mailServer.login(data["sender"], "rianisawesome")
-            mailServer.sendmail(data["sender"], [data["recipient"]], msg.as_string())
-            mailServer.close()
-            menu_query.update({"sent":True}, synchronize_session=False)
+            s = smtplib.SMTP()
+            s.connect()
+            s.sendmail(data["sender"], data["recipient"], msg.as_string())
+            s.close()
 
-
-    
 
 
