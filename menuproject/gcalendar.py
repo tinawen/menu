@@ -19,6 +19,7 @@ from models import (
 CALENDAR_ID = '/home/tina/client_secrets.json'
 CLIENT_SECRETS = '/home/tina/credentials.dat'
 
+health_icon = ['\xe2\x97\x95\xe2\x80\xbf\xe2\x97\x95', '\xe2\x8a\x99\xef\xb9\x8f\xe2\x8a\x99', '\xe0\xb2\xa0_\xe0\xb2\xa0']
 health_name = ['Healthy', 'Moderate', 'Unhealthy']
  
 def get_menu_name(menu):
@@ -47,7 +48,7 @@ def get_menu_desc(menu, for_calendar):
         desc = desc + menu_item.name.decode('utf8')
         if menu_item.healthy:
             if for_calendar:
-                desc = desc + '\n' + u'\u2764' + health_name[menu_item.healthy-1] + u'\u2764 '
+                desc = desc + '\n' + health_icon[menu_item.healthy-1].decode('utf8') + ' ' + health_name[menu_item.healthy-1] + ' '
             else:
                 desc = desc + '\n' + '(' + health_name[menu_item.healthy-1] + ') '
         
