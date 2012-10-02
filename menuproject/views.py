@@ -162,7 +162,7 @@ def create_menu_item(request):
     DBSession.add(new_menu_item)
     print 'adding menu_item, desc is %r' % request.params['description'].encode('utf8')
     menu_item = DBSession.query(MenuItem).filter(MenuItem.name==request.params['name'].encode('utf8')).filter(MenuItem.description==request.params['description'].encode('utf8')).filter(MenuItem.menu_id==request.matchdict['menu_id']).filter(MenuItem.healthy==request.params['healthy']).one()
-    allergens = ["Shellfish", "Nuts", "Dairy", "Spicy", "Vegan", "Gluten-free"]
+    allergens = ["Shellfish", "Nuts", "Dairy", "Spicy", "Vegan", "Gluten-free", "Alcohol"]
     for allergen in allergens:
         if allergen in request.params:
             new_allergen = Allergen(menu_item_id=menu_item.id, allergen = allergen)

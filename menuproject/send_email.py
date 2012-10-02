@@ -108,7 +108,7 @@ View the menu on <a href="http://food.corp.dropbox.com/menu/
             s.connect()
             s.sendmail(data["sender"], data["recipient"], msg.as_string())
             s.close()
-
+            menu_query.update({"sent":True}, synchronize_session=False)
 
 
 

@@ -197,7 +197,7 @@ label {
   padding-right: 20px;
 }
 label.check-label {
-  margin: 0 20px 10px 0;
+  margin: 0 10px 10px 0;
   font-size: 11px;
   padding:3px 0 0 0;
 }
@@ -587,7 +587,7 @@ h2 {
   margin: 15px 0 5px 0;
 }
 .modal-wrap label.check-label {
-  width: 5em;
+  width: 5.5em;
   text-align: left;
   margin: 0;
   float: left;

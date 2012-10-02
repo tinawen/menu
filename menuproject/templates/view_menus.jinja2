@@ -77,13 +77,14 @@
     {% endblock %}
         
   </div>
-  
+  {% block feedbackform %}
   <div class="feedback-form">
     <div class="feedbackf">
     <a class="cancel" href="#">cancel</a>
     <iframe src="https://docs.google.com/a/dropbox.com/spreadsheet/embeddedform?formkey=dHBfdGlPUHBoNUN1ZjhGYnJXZV9PclE6MQ" width="760" height="625" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
     </div>
-   </div>
+  </div>
+  {% endblock %}
   <script>
     $('.picker').on('click', function() {
     $('.nav').toggleClass('display');
