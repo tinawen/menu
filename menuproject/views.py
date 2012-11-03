@@ -76,8 +76,13 @@ def convert_to_month_string (month, year):
     return str(calendar.month_name[month]) + ' ' + str(year)
    
 def build_months_dict():
+    today = datetime.datetime.now()
+    new_year = int(today.strftime("%Y"))
+    
+    new_month = int(today.strftime("%m"))
     months_dict = {}
     distinct_months = DBSession.query(extract('month', Menu.date), extract('year', Menu.date)).distinct().all()
+    months_dict[int(new_month), int(new_year)] = convert_to_month_string(new_month, new_year)
     for distinct_month in distinct_months:
         months_dict[int(distinct_month[0]), int(distinct_month[1])] = convert_to_month_string(int(distinct_month[0]), int(distinct_month[1]))
     return months_dict
