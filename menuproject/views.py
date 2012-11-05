@@ -36,8 +36,7 @@ LUNCH_END_HOUR = 15
 
 #utility function to figure out whether the app is in debug mode
 def debug_mode():
-    pyramid_env = os.environ.get('PYRAMID_ENV', 'debug')
-    return pyramid_env == 'debug'
+    return False
 
 #this function converts two integers (month, year) to a displayable string
 def convert_to_month_string (month, year):
