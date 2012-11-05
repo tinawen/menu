@@ -5,7 +5,7 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email import Encoders
-from datetime import date 
+from datetime import date
 import datetime
 import json
 import smtplib
@@ -24,6 +24,9 @@ from models import (
     )
 
 MAIL_SECRETS = '/home/tina/mail_secrets.json'
+HEALTH_COLORS = ['green', 'orange', 'red']
+BREAKFAST_LUNCH_CUTOFF_HOUR = 10
+LUNCH_DINNER_CUTOFF_HOUR = 14
 
 config_uri = "/home/tina/MenuProject/development.ini"
 settings = get_appsettings(config_uri)
@@ -32,20 +35,21 @@ DBSession.configure(bind=engine)
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
+
+#figure out which meal this is for
 meal_filter = 1
-if now.hour < 10:
+if now.hour < BREAKFAST_LUNCH_CUTOFF_HOUR:
     meal_filter = 1
-elif 10 <= now.hour < 14:
+elif BREAKFAST_LUNCH_CUTOFF_HOUR <= now.hour < LUNCH_DINNER_CUTOFF_HOUR:
     meal_filter = 2
 else:
     meal_filter = 3
 
-health_color = ['green', 'orange', 'red']
-
 menu_query = DBSession.query(Menu).filter(Menu.date==today).filter(Menu.time_sort_key==meal_filter)
 if len(menu_query.all()) == 1:
     menu = menu_query.one()
-    if not menu.sent:
+#    if not menu.sent:
+    if True:
         if len(menu.menus) >= 1:
             desc = "<div>"
             for menu_item_id in menu.menus.split(' '):
@@ -53,7 +57,7 @@ if len(menu_query.all()) == 1:
                 allergens = DBSession.query(Allergen).filter(Allergen.menu_item_id==menu_item.id).all()
                 allergen_string = ', '.join([a.allergen for a in allergens])
                 if menu_item.healthy:
-                    desc = desc + "<div style='display: block; text-align:center; font-size:15px; font-weight:bold; color:" + health_color[menu_item.healthy-1] + "'>" + "&hearts; " + "<font color=black>" + menu_item.name.decode('utf8') + '</font></div>'
+                    desc = desc + "<div style='display: block; text-align:center; font-size:15px; font-weight:bold; color:" + HEALTH_COLORS[menu_item.healthy-1] + "'>" + "&hearts; " + "<font color=black>" + menu_item.name.decode('utf8') + '</font></div>'
                 else:
                     desc = desc + "<div style='display: block; text-align:center; font-size:15px; font-weight:bold;'>" + menu_item.name.decode('utf8') + '</div>'
 
@@ -74,7 +78,7 @@ if len(menu_query.all()) == 1:
 
             msg['From'] = data["sender"]
             msg['To'] = data["recipient"]
-            msg['Subject'] = get_menu_name(menu).encode('utf8')
+            msg['Subject'] = get_menu_name(menu).decode('utf8')
             html_part1 = """
 <html>
   <head></head>
@@ -103,7 +107,7 @@ View the menu on <a href="http://food.corp.dropbox.com/menu/
             print html
             msg_part  = MIMEText(html, 'html')
             msg.attach(msg_part)
-            
+
             s = smtplib.SMTP()
             s.connect()
             s.sendmail(data["sender"], data["recipient"], msg.as_string())

@@ -1,127 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
 	  "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd"><html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-      <title></title>
-      <!--[if lte IE 8]>
-      <script src="http://js.cwhcode.com/html5/"></script>
-      <![endif]-->
-      <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta names="apple-mobile-web-app-status-bar-style" content="black" />
-      
-      <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
-      <link rel="stylesheet" href="/static/css/screen.css" type="text/css" media="screen" />
-    </head>
-    <body class="display">
-      <div class="menu-display">
-      	<ul class="menu-list">
-  	    {% for menu_item in menu_items %}
-	    {% if menu_item.name.decode('utf8') %}
-	    <li class="dish">
-	      <div class="dish-title">
-		{% if menu_item.healthy %}
-		{% set healthy_factor = menu_item.healthy %}
-		{% set healthyImageName = "/static/i/healthy" ~ healthy_factor ~ ".png" %}
-		<img src={{healthyImageName}} class="dish-allergen" width="20" height="20" />
-		{% endif %}
-		{{menu_item.name.decode('utf8')}}</div> 
-	      {% if menu_item.description.decode('utf8') %} 
-	      <div class="description">
-		{% for item_line in menu_item.description.decode('utf8').split('\n') %}
-		{{item_line}}<br/>
-		{% endfor %}
-	      </div>
-	      {% endif %}
-	      <div class="allergen-images">
-		{% set menu_allergens = allergens[loop.index-1] %}
-		{% for restriction in menu_allergens %}
-		{% set imageName = "/static/i/" + restriction + ".png" %}
-		<img src={{imageName}} class="dish-allergen"  alt="{{restriction}}" title="{{restriction}}" width="20" height="20" />
-		{% endfor %}
-		<br class="clear" />
-	      </div>
-	    </li>
-	    {% endif %}
-	    {% endfor %}
-
-	</ul>
-<!--	<input type=submit id=additem text="Add"> -->
-	</div>
-
-	<script src='/static/j/jquery.js'></script>
-	<script>
-	  $(document).ready(function(){
-	  setInterval("location.reload(true)", 180000);
-	  });
-
-	  // Modal Dialogues
-	  $modals = $('.modal-wrap, .modal');
-	  $('.add-dish, .cancel').on('click', function(){
-	  $modals.toggleClass('display');
-	  })
-
-	  $(document).keyup(function(event) {
-	  if(event.which === 27) {
-	  $('.modal, .modal-wrap, .nav').removeClass('display');
-	  }
-	  });
-
-	  // Scale/layout
-
-	  $('#additem').click(function(){
-	  $('.dish').eq(0).clone().appendTo($('.menu-list'))
-	  layout()
-	  });
-
-	  function layout(){
-	  $('.break').remove()
-	  var $dishes = $('.dish')
-	  var $visible = $dishes.filter(':visible')
-	  var count = $visible.length
-	  console.log(count)
-	 
-
-	  var font_size_array = new Array (
-	  "40px",
-	  "30px",
-	  "30px",
-	  "30px",
-	  "22px",
-	  "22px",
-	  "22px",
-	  "22px",
-	  "22px",
-	  "18px"
-	  )
-	  $("body").css("font-size", font_size_array[count-1]);
-	 
-	  var all_breakpoints = new Array(
-	  [],
-	  [],
-	  [2],
-	  [3],
-	  [3],
-	  [4],
-	  [3,5],
-	  [3,6],
-	  [4, 7],
-	  [4, 7]
-	  )
-
-	  var breakpoints = all_breakpoints[count-1];
-	  
-	  for (var i = 0; i < breakpoints.length; i++) {
-			      $dishes.eq(breakpoints[i] - 1).before('<li class="break"></li>');
-			      console.log($dishes.eq(breakpoints[i] - 1));
-			      };
-			      }
-			      
-			      layout()
-
-
-			      </script>
-
-      </body>
-    </html>
+          <head>
+            <meta charset="utf-8" />
+            <title></title>
+            <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <meta names="apple-mobile-web-app-status-bar-style" content="black" />
+            <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
+            <link rel="stylesheet" href="/static/css/screen.css" type="text/css" media="screen" />
+          </head>
+          <body class="display">
+            <div class="menu-display">
+      	      <ul class="menu-list">
+  	            {% for menu_item in menu_items %}
+	              {% if menu_item.name.decode('utf8') %}
+	                <li class="dish">
+	                  <div class="dish-title">
+		                {% if menu_item.healthy %}
+		                  {% set healthy_factor = menu_item.healthy %}
+		                  {% set healthyImageName = "/static/i/healthy" ~ healthy_factor ~ ".png" %}
+		                  <img src={{healthyImageName}} class="dish-allergen" width="20" height="20" />
+		                {% endif %}
+		                {{menu_item.name.decode('utf8')}}
+                      </div>
+	                  {% if menu_item.description.decode('utf8') %}
+	                    <div class="description">
+		                  {% for item_line in menu_item.description.decode('utf8').split('\n') %}
+		                    {{item_line}}
+                            <br />
+		                  {% endfor %}
+	                    </div>
+	                  {% endif %}
+	                  <div class="allergen-images">
+		                {% set menu_allergens = allergens[loop.index-1] %}
+		                {% for restriction in menu_allergens %}
+		                  {% set imageName = "/static/i/" + restriction + ".png" %}
+		                  <img src={{imageName}} class="dish-allergen"  alt="{{restriction}}" title="{{restriction}}" width="20" height="20" />
+		                {% endfor %}
+		                <br class="clear" />
+	                  </div>
+	                </li>
+	              {% endif %}
+	            {% endfor %}
+              </ul>
+	        </div>
+	        <script src='/static/j/jquery.js'></script>
+	        <script src='/static/j/daily_menu.js'></script>
+          </body>
+</html>

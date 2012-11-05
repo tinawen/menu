@@ -1,69 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
           "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd"><html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-      <title></title>
-      <!--[if lte IE 8]>                                                                                                                                                                                                                                                                                                         
-      <script src="http://js.cwhcode.com/html5/"></script>                                                                                                                                                                                                                                                                       
-      <![endif]-->
-      <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta names="apple-mobile-web-app-status-bar-style" content="black" />
-      	<link rel="stylesheet" type="text/css" href="/static/css/styles.css" media="all"> 
-      <link rel="stylesheet" type="text/css" href="/static/css/print.css" media="print">
-      <script src='/static/j/jquery.js'></script>
-      <script type="text/javascript">
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-34677345-1']);
-	_gaq.push(['_trackPageview']);
-	
-	(function() {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-      </script>
-    </head>
-    <body>
-      <div class="header">
-	{% set threeMeals = "Breakfast", "Lunch", "Dinner" %}
-        <h1>Viewing {{menu.date}}, {{threeMeals[menu.time_sort_key-1]}}</h1>
-        <div class="read-title">{{menu.name.decode('utf8')}}</div>
-        <a class="back button" href="/">Back to Menus</a>
-      </div>
-      <div class="menu">
-        <ul class="menu-list">
-	  {% for menu_item in menu_items %}
+          <head>
+            <meta charset="utf-8" />
+            <title></title>
+            <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <meta names="apple-mobile-web-app-status-bar-style" content="black" />
+      	    <link rel="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
+            <link rel="stylesheet" type="text/css" href="/static/css/print.css" media="print" />
+            <script src='/static/j/jquery.js'></script>
+            <script src='/static/j/analytics.js'></script>
+          </head>
+          <body>
+            <div class="header">
+              <h1>Viewing {{menu.date}}, {{three_meals[menu.time_sort_key-1]}}</h1>
+              <div class="read-title">{{menu.name.decode('utf8')}}</div>
+              <a class="back button" href="/">Back to Menus</a>
+            </div>
 
-	  <li class="dish">
-            <img src="/static/i/logo.png" class="logo"/>
-	    <div class="dish-title">
-	    {% if menu_item.healthy %}
-	      {% set healthy_factor = menu_item.healthy %}
-	      {% set healthyImageName = "/static/i/healthy" ~ healthy_factor ~ "_print.png" %}
-              <img src={{healthyImageName}} width="20" height="20" center/>
-	    {% endif %}
-	      {{menu_item.name.decode('utf8')}}
-	      </div>
-	    {% if menu_item.description.decode('utf8') %} 
-	    <div class="description">
-	      {% for item_line in menu_item.description.decode('utf8').split('\n') %}
-	      {{item_line}}<br/>
-	      {% endfor %}
-	    </div>
-	    {% endif %}
-	    <div class="allergen-images">
-	      
-            {% set menu_allergens = allergens[loop.index-1] %}
-	    {% for restriction in menu_allergens %}
-	      {% set imageName = "/static/i/" + restriction + ".png" %}
-            <img src={{imageName}} alt="{{restriction}}" title="{{restriction}}" width="20" height="20" />
-	    {% endfor %}
-	    <br class="clear" />
-	    </div>
-	  </li>                                                                                                                                                                                                                                                                                                                  
-          {% endfor %}                                                                                                                                                                                                                                                                                                                 </ul>
-      </div>
-    </body>
- </html>
+            <div class="menu">
+              <ul class="menu-list">
+	            {% for menu_item in menu_items %}
+	              <li class="dish">
+	                <div class="dish-title">
+	                  {% if menu_item.healthy %}
+	                    {% set healthyImageName = "/static/i/healthy" ~ menu_item.healthy ~ "_print.png" %}
+                        <img src={{healthyImageName}} width="20" height="20" center/>
+	                  {% endif %}
+	                  {{menu_item.name.decode('utf8')}}
+	                </div>
+	                {% if menu_item.description.decode('utf8') %}
+	                  <div class="description">
+	                    {% for item_line in menu_item.description.decode('utf8').split('\n') %}
+	                      {{item_line}}<br/>
+	                    {% endfor %}
+	                  </div>
+	                {% endif %}
+	                <div class="allergen-images">
+                      {% set menu_allergens = allergens[loop.index-1] %}
+	                  {% for restriction in menu_allergens %}
+	                    {% set imageName = "/static/i/" + restriction + ".png" %}
+                        <img src={{imageName}} alt="{{restriction}}" title="{{restriction}}" width="20" height="20" />
+	                  {% endfor %}
+	                  <br class="clear" />
+	                </div>
+	              </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </body>
+</html>

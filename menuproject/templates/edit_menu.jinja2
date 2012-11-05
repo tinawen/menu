@@ -1,221 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
-	  "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd"><html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-      <title></title>
-      <!--[if lte IE 8]>
-      <script src="http://js.cwhcode.com/html5/"></script>
-      <![endif]-->
-      <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta names="apple-mobile-web-app-status-bar-style" content="black" />
-      <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
+	      "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd"><html lang="en-us">
+          <head>
+            <meta charset="utf-8" />
+            <title></title>
+            <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <meta names="apple-mobile-web-app-status-bar-style" content="black" />
+            <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
+            <script src="/static/j/jquery.js"></script>
+            <script src="/static/j/jquery-ui-1.8.21.custom.min.js"></script>
+            <script src="/static/j/edit_menu.js"></script>
+          </head>
+          <body>
+            <div class="header">
+	          <h1>Editing {{menu.date}}, {{three_meals[menu.time_sort_key-1]}}</h1>
+	          <input type="text" class="title" id="menuTitle" value="{{menu.name.decode('utf8')}}" menu_id="{{menu.id}}" />
+	          <div class="button" id="add-menu-item">Add a Dish</div>
+	          <a class="back button" href="/edit">Back to Menus</a>
+            </div>
 
-      <script src="/static/j/jquery.js"></script>
-          <script src="/static/j/jquery-ui-1.8.21.custom.min.js"></script>
-
-   </head>
-    <body>
-      <div class="header">
-	{% set threeMeals = "Breakfast", "Lunch", "Dinner" %}
-	<h1>Editing {{menu.date}}, {{threeMeals[menu.time_sort_key-1]}}</h1>
-	<input type="text" class="title" id="menuTitle" value="{{menu.name.decode('utf8')}}" />
-	<a class="add-dish button" href="#">Add a Dish</a>
-	<a class="back button" href="/edit">Back to Menus</a>
-      </div>
-      {% set all_allergens = "Shellfish", "Nuts", "Dairy", "Spicy", "Vegan", "Gluten-free", "Alcohol" %}
-      {% set healthy = "Healthy", "Moderate", "Unhealthy" %}
-      <div class="menu">
-	<ul id="sortable" class="menu-list">
-	  {% for menu_item in menu_items %}
-	  <li class="dish" id={{menu_item.id}}>
-	    <input type="text" class="dish-title" menuItemId="{{menu_item.id}}" value="{{menu_item.name.decode('utf8')}}">
-	      <textarea class="description" id="description" menuItemId="{{menu_item.id}}">{{menu_item.description.decode('utf8')}}</textarea>
-	      <div class="allergens">
-		{% set selected_allergens = allergens[loop.index-1] %}
-		{% for allergen in all_allergens %}
-		{% set check = allergen in selected_allergens %}
-		{% if check %}
-		<input class="checkbox" type="checkbox" menuItemId="{{menu_item.id}}" allergenName="{{allergen}}" id="allergen" name="{{allergen}}" checked>
-		{% else %}
-		<input class="checkbox" type="checkbox" menuItemId="{{menu_item.id}}" allergenName="{{allergen}}" id="allergen" name="{{allergen}}">
-		 {% endif %}
-		  <label class="check-label" for="city">{{allergen}}</label>
-		  {% endfor %}
-		  <div align="center"><br>
-		      {% for healthy_level in healthy %}
-			{% if menu_item.healthy == loop.index %}
-		      <input type="radio" class="healthy-selection" menuItemId="{{menu_item.id}}" value="{{loop.index}}" name={{menu_item.id}} id={{menu_item.id}} checked></input>
-		      {% else %}
-		      <input type="radio" class="healthy-selection" menuItemId="{{menu_item.id}}" value="{{loop.index}}" name={{menu_item.id}} id={{menu_item.id}}></input>
-			    {% endif %}
-			  <label for="{{healthy_level}}" class="check-label">{{healthy_level}}</label>
-			{% endfor %}
-		</div>
-		
-
-
-		<br class="clear" />
-	      </div>
-	      <div class="actions"><a href="#" class="move circle-button">Move</a><a href="/delete_menu/{{menu_item.id}}" class="delete circle-button">Delete</a></div>
-		      
-	    </li>
-	  
-	    {% endfor %}
-	  </ul>
-	</div>			  
-	    <!--  {% if not menu.sent %}
-	      <a class="publish button" href="#">I'm DONE!</a>
-	      {% endif %}
--->
-		<div class="modal-wrap">    
-		  <form class="adding modal" onsubmit="return checkBeforeSubmit()" action="../create_menu_item/{{menu.id}}">
-		    <h2>Add a Dish</h2>
-		    <a class="cancel" href="#">cancel</a>     
-		    <label for="name">Dish Name</label>
-		    <input type="text" id="name" name="name">
-			<label for="description">Description</label>
-			<textarea class="description" name="description"></textarea>
-			<br>
-			  <label>Allergens</label>
-			  <div class="allergens">
-			    {% for allergen in all_allergens %}
-			    <div class="allergen">
-			    <input class="checkbox" type="checkbox" id={{allergen}} name={{allergen}}>
-			      <label class="check-label" for="checkbox">{{allergen}}</label>
+            <div class="menu">
+	          <ul id="sortable" class="menu-list" menu_id={{menu.id}}>
+	            {% for menu_item in menu_items %}
+	              <li class="dish" id={{menu_item.id}}>
+	                <input type="text" class="dish-title" menu_item_id="{{menu_item.id}}" value="{{menu_item.name.decode('utf8')}}" />
+	                <textarea class="description" id="description" menu_item_id="{{menu_item.id}}">{{menu_item.description.decode('utf8')}}</textarea>
+	                <div class="allergens">
+		              {% set selected_allergens = allergens[loop.index-1] %}
+		              {% for allergen in allergen_list %}
+		                {% set check = allergen in selected_allergens %}
+		                {% if check %}
+		                  <input class="checkbox" type="checkbox" menu_item_id="{{menu_item.id}}" allergenName="{{allergen}}" id="allergen" name="{{allergen}}" checked />
+		                {% else %}
+		                  <input class="checkbox" type="checkbox" menu_item_id="{{menu_item.id}}" allergenName="{{allergen}}" id="allergen" name="{{allergen}}" />
+		                {% endif %}
+		                <label class="check-label" for="city">{{allergen}}</label>
+		              {% endfor %}
+		              <div align="center">
+                        <br />
+		                {% for healthy_level in healthy_factor %}
+			              {% if menu_item.healthy == loop.index %}
+		                    <input type="radio" class="healthy-selection" menu_item_id="{{menu_item.id}}" value="{{loop.index}}" name={{menu_item.id}} id={{menu_item.id}} checked />
+		                  {% else %}
+		                    <input type="radio" class="healthy-selection" menu_item_id="{{menu_item.id}}" value="{{loop.index}}" name={{menu_item.id}} id={{menu_item.id}} />
+			              {% endif %}
+			              <label for="{{healthy_level}}" class="check-label">{{healthy_level}}</label>
+			            {% endfor %}
+		              </div>
+		              <br class="clear" />
+	                </div>
+	                <div class="actions">
+                      <a href="#" class="move circle-button"></a>
+                      <div id="delete-menu" class="delete circle-button" menu_item_id="{{menu_item.id}}">Delete</div>
+                    </div>
+                  </li>
+                {% endfor %}
+	          </ul>
+	        </div>
+		    <div class="modal-wrap" id="add-menu-item-modal-wrap">
+		      <form class="adding modal" id="add-menu-item-modal" action="{{ create_menu_item_url }}">
+		        <h2>Add a Dish</h2>
+		        <a class="cancel" href="#">cancel</a>
+		        <label for="name">Dish Name</label>
+		        <input type="text" id="name" name="name" />
+			    <label for="description">Description</label>
+			    <textarea class="description" name="description"></textarea>
+			    <br />
+			    <label>Allergens</label>
+			    <div class="allergens">
+			      {% for allergen in allergen_list %}
+			        <div class="allergen">
+			          <input class="checkbox" type="checkbox" id={{allergen}} name={{allergen}} />
+			          <label class="check-label" for="checkbox">{{allergen}}</label>
+			        </div>
+			      {% endfor %}
+			      <label>Health Factor</label>
+			      <div align="center">
+                    <br />
+			        {% for healthy_level in healthy_factor %}
+			          <div class="healthy_level">
+			            <input type="radio" class="checkbox" name="healthy" id="{{healthy_level}}" value="{{loop.index}}" />
+				        <label for="{{healthy_level}}" class="check-label">{{healthy_level}}</label>
+			          </div>
+			        {% endfor %}
 			      </div>
-			    {% endfor %}
-			 <label>Health Factor</label>
-			 <div align="center"><br>
-			     {% for healthy_level in healthy %}
-			     <div class="healthy_level">
-			       <input type="radio" class="checkbox" name="healthy" id="{{healthy_level}}" value="{{loop.index}}">
-				 <label for="{{healthy_level}}" class="check-label">{{healthy_level}}</label>
-			       </div>
-			       {% endfor %}
-			     </div>
-			</div>
-				  <br>
-				    <button type="submit" class="button floatright" name="submit">Add</buttton>
-				  </form>
-		</div> 
-
-				<script type="text/javascript">
-				  var wasSubmitted = false;
-				  function checkBeforeSubmit() {
-				  if (!wasSubmitted) {
-				  wasSubmitted = true;
-				  return wasSubmitted;
-				  }
-				  return false;
-				  }
-				  $('.add-dish').on('click', function() {
-
-				  $('.modal-wrap').toggleClass('display');
-
-				  $('.modal').toggleClass('display');
-				  
-
-				  });
-				  
-				  $('.cancel').on('click', function() {
-
-				  $('.modal-wrap').toggleClass('display');
-
-				  $('.modal').toggleClass('display');
-				  
-
-				  });
-				  
-				  $(document).ready(function(){
-				  $('#menuTitle').live('change', function() {
-				  var itemValue = escape($(this).val());
-				  $.ajax({
-				  type: "POST",
-				  url: "/update_menus_name/" + {{menu.id}},
-				  data:JSON.stringify(itemValue),
-				  contentType: 'application/json; charset=utf-8',
-				  })
-				  })
-
-				  $('.dish-title').live('change', function() {
-				  var itemValue = escape($(this).val());
-				  $.ajax({
-				  type: "POST",
-				  url: "/update_menu_item_name/" + $(this)[0].getAttribute('menuItemId'),
-				  data:JSON.stringify(itemValue),
-				  contentType: 'application/json; charset=utf8',
-				  success: function(data){
-				  console.log(data);
-				  $('#menuTitle').val(eval(data));
-				  }
-				  })
-				  })
-
-				  $('.description').change(function() {
-				  var itemValue = escape($(this).val());
-				  $.ajax({
-				  type: "POST",
-				  url: "/update_menu_item_desc/" + $(this)[0].getAttribute('menuItemId'),
-				  data:JSON.stringify(itemValue),
-				  contentType: 'application/json; charset=utf8'
-				  })
-				  })
-
-				  $('.checkbox#allergen').change(function() {
-				  if ($(this).is(":checked")) {
-				  $.ajax({
-				  type:"POST",
-				  url: "/update_menu_item_allergen/" + $(this)[0].getAttribute('menuItemId'),
-				  data:"menuItemAllergenOn=" + $(this)[0].getAttribute('allergenName')
-				  })
-				  } else {
-				  $.ajax({
-				  type:"POST",
-				  url: "/update_menu_item_allergen/" + $(this)[0].getAttribute('menuItemId'),
-				  data:"menuItemAllergenOff=" + $(this)[0].getAttribute('allergenName')
-				  })
-				  }
-				  })
-
-				  $('.healthy-selection').live('change', function() {
-				  $.ajax({
-				  type:"POST",
-				  url: "/update_menu_item_healthy/" + $(this)[0].getAttribute('menuItemId'),
-				  data: "healthy=" + $(this).val()
-				  })				  
-				  })
-				  $('.publish').click(function(){
-				  $.ajax({
-				  type:"POST",
-				  url: "/publish/" + {{menu.id}},
-				  success: function(data){
-				  console.log(eval(data));
-				  $('.publish').hide();
-				  }
-				  })
-				  })
-				  });
-
-				  $(function() {
-				  $("#sortable").sortable({
-				  update: function(event, ui) {
-				  var newOrder = $(this).sortable('toArray').toString();
-				  $.ajax({
-				  type:"POST",
-				  url: "/update_menus/" + {{menu.id}},
-				  data:"menuIds=" + newOrder
-				  })
-				  }
-				  });
-				  $("#sortable").disableSelection();
-				  });
-
-				</script>
-				
-			      </body>
-			    </html>
+			    </div>
+				<br />
+				<button type="submit" class="button floatright" name="submit">Add</buttton>
+			  </form>
+		    </div>
+          </body>
+</html>
 
 
 

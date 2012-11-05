@@ -1,114 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
-    "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd"><html lang="en-us">
-<head>
-  <meta charset="utf-8">
-  <title></title>
-  <!--[if lte IE 8]>
-  <script src="http://js.cwhcode.com/html5/"></script>
-  <![endif]-->
-  <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta names="apple-mobile-web-app-status-bar-style" content="black" />
-  
-  <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
-  <script src='/static/j/jquery.js'></script>
-  <script type="text/javascript">
+          "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd"><html lang="en-us">
+          <head>
+            <meta charset="utf-8">
+              <title></title>
+              <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
+              <meta name="apple-mobile-web-app-capable" content="yes" />
+              <meta names="apple-mobile-web-app-status-bar-style" content="black" />
+              <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
+              <script src="/static/j/jquery.js"></script>
+              <script src="/static/j/analytics.js"></script>
+              <script src="/static/j/view_menus.js"></script>
+            </head>
+            <body class="index">
+              <div class="header">
+                <h1>All Menus</h1>
+                {% block head %}
+                  <a class="button long" href="https://www.google.com/calendar/render?cid=dropbox.com_a4mvuefvs56vpn3k0780pfh4t4@group.calendar.google.com">Import to Google Calendar</a>
+                  <div class="button feedback" id="submit-feedback">Website Feedback</div>
+                {% endblock head%}
+              </div>
+              <div class="head">
+                <div class="picker button">{{selected_month_string}}</div>
+                <ul class="nav">
+                  <div class="beak"></div>
+                  <span>
+                    {% block month_picker %}
+                      {% for month_menu in month_menus %}
+                        <li><a href="{{menus_monthly_url_prefix}}{{month_menu[0][1]}}/{{month_menu[0][0]}}">{{month_menu[1]}}</a></li>
+                      {% endfor %}
+                    {% endblock month_picker %}
+                  </span>
+                </ul>
+              </div>
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34677345-1']);
-  _gaq.push(['_trackPageview']);
+              {% block populate_menus %}
+                <div class="menu index">
+                  <ul class="menu-index">
+                    {% for weekly_menus in menus %}
+                      <li class="divider">
+	                    <div class="divider-title">Week of {{week_start_list[loop.index-1]}}</div>
+                      </li>
+                      {% for menu in weekly_menus %}
+                        {% set selectedMeal = three_meals[menu.time_sort_key-1] %}
+                        <li class="dish">
+	                      <a href="{{menu_url_prefix}}{{menu.id}}">
+	                        <span class="dish-title">{{menu.name.decode('utf8')}}</span><span class="date">{{selectedMeal}}, {{menu.date.strftime("%A, %m/%d/%y")}}</span></a>
+	                    </li>
+                      {% endfor %}
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endblock populate_menus %}
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+              {% block addMenu %}
+              {% endblock addMenu %}
 
-  </script>
-</head>
-<body class="index">
-  
-  <div class="header">
-    <h1>All Menus</h1>
-    {% block head %}
-     <a class="add-dish button long" href="https://www.google.com/calendar/render?cid=dropbox.com_a4mvuefvs56vpn3k0780pfh4t4@group.calendar.google.com">Import to Google Calendar</a>
-     <a class="add-dish button feedback" id="submit-feedback" href="#">Website Feedback</a>
-    {% endblock %}
-    </div>
-  
- <div class="head">
-    <a class="picker button" href="#">{{selected_month}}</a>
-    <ul class="nav">
-    <div class="beak"><img src="/static/i/beak.png" alt="beak" width="23" height="8" /></div>
-    <span>
-      {% block select_month %}
-      {% for month in months %}
-      <li><a href="/view_menus/{{loop.index-1}}">{{month}}</a></li>
-      {% endfor %}
-      {% endblock %}
-      </span>
-    </ul>
-  </div>
-  
-  {% block view_or_edit %}
-{% set threeMeals = "Breakfast", "Lunch", "Dinner" %}
-  <div class="menu index">
-    <ul class="menu-index">
-      {% for weekly_menus in menus %}
-         <li class="divider">
-	  <div class="divider-title">Week of {{week_starts[loop.index-1]}}</div>
-      </li>
-
-      {% for menu in weekly_menus %}
-      {% set selectedMeal = threeMeals[menu.time_sort_key-1] %}
-      <li class="dish">
-	<a href="/menu/{{menu.id}}">
-	  <span class="dish-title">{{menu.name.decode('utf8')}}</span><span class="date">{{selectedMeal}}, {{menu.date.strftime("%A, %m/%d/%y")}}</span></a>
-	</li>
-      {% endfor %}
-      {% endfor %}
-      </ul>
-    </div>
-  {% endblock %}
-  <div class="modal-wrap">
-
-    {% block addMenu %}
-    {% endblock %}
-        
-  </div>
-  {% block feedbackform %}
-  <div class="feedback-form">
-    <div class="feedbackf">
-    <a class="cancel" href="#">cancel</a>
-    <iframe src="https://docs.google.com/a/dropbox.com/spreadsheet/embeddedform?formkey=dHBfdGlPUHBoNUN1ZjhGYnJXZV9PclE6MQ" width="760" height="625" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
-    </div>
-  </div>
-  {% endblock %}
-  <script>
-    $('.picker').on('click', function() {
-    $('.nav').toggleClass('display');
-    });
-    
-    $(document).keyup(function(event) {
-    if(event.which === 27) {
-    $('.modal').removeClass('display');
-    $('.modal-wrap').removeClass('display');
-    $('.nav').removeClass('display');
-    }
-    });
-    $('#submit-feedback').on('click', function() {
-    $('.feedback-form').toggleClass('display');
-    $('.feedbackf').toggleClass('display');
-    });
-
-    $('.cancel').on('click', function() {
-    $('.feedback-form').toggleClass('display');
-    $('.feedbackf').toggleClass('display');
-    });
-  </script>
-  </body>
-</html>
+              {% block feedbackform %}
+                <div class="feedback-form">
+                  <div class="feedbackf">
+                    <a class="cancel" href="#">cancel</a>
+                    <iframe src="https://docs.google.com/a/dropbox.com/spreadsheet/embeddedform?formkey=dHBfdGlPUHBoNUN1ZjhGYnJXZV9PclE6MQ" width="760" height="625" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+                  </div>
+                </div>
+              {% endblock feedbackform%}
+            </body>
+          </html>
 
 
 
