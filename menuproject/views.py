@@ -157,7 +157,7 @@ def edit_menus(request):
     return_params = view_menus(request)
     return_params['menus_monthly_url_prefix'] = '/edit_menus/'
     return_params['menu_url_prefix'] = '/edit_menu/'
-    return_params['create_menu_url'] = route_url('create_menu', request)
+    return_params['create_menu_url'] = '/create_menu'
     return return_params
 
 # editing a specific menu
@@ -168,7 +168,7 @@ def edit_menu(request):
     return_params = refresh_menu(menu)
     return_params['allergen_list'] = ALLERGENS
     return_params['healthy_factor'] = HEALTHY_FACTOR
-    return_params['create_menu_item_url'] = route_url('create_menu_item', request, menu_id=menu.id)
+    return_params['create_menu_item_url'] = '/create_menu_item/'+ str(menu.id)
     return return_params
 
 #create a menu
