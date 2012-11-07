@@ -29,6 +29,7 @@ from models import (
     Allergen,
     )
 
+PRODUCTION_FILE_PATH = '/home/tina/production_mode.txt'
 MAIL_SECRETS = '/home/tina/mail_secrets.json'
 ALLERGENS = ["Shellfish", "Nuts", "Dairy", "Spicy", "Vegan", "Gluten-free", "Alcohol"]
 BREAKFAST_END_HOUR = 9
@@ -36,7 +37,8 @@ LUNCH_END_HOUR = 15
 
 #utility function to figure out whether the app is in debug mode
 def debug_mode():
-    return False
+    is_debug = not os.path.isfile(PRODUCTION_FILE_PATH)
+    return is_debug
 
 #this function converts two integers (month, year) to a displayable string
 def convert_to_month_string (month, year):
