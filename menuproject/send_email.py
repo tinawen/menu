@@ -48,8 +48,7 @@ else:
 menu_query = DBSession.query(Menu).filter(Menu.date==today).filter(Menu.time_sort_key==meal_filter)
 if len(menu_query.all()) == 1:
     menu = menu_query.one()
-#    if not menu.sent:
-    if True:
+    if not menu.sent:
         if len(menu.menus) >= 1:
             desc = "<div>"
             for menu_item_id in menu.menus.split(' '):
@@ -69,7 +68,7 @@ if len(menu_query.all()) == 1:
                     desc = desc + "<div style='display: block; font-size:11px; text-align:center'>"
                     desc = desc + '(' + allergen_string + ')'
                     desc = desc + '</div>'
-                desc = desc + '</div><br>'
+                desc = desc + '</div><br>\n'
 
             json_data = open(MAIL_SECRETS)
             data = json.load(json_data)
