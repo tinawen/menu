@@ -344,6 +344,7 @@ def daily_menu(request):
     # before = now - timedelta(days = 1)
     # yesterday = before.strftime('%Y-%m-%d')
     # today = yesterday
+    # today = datetime.date(2012, 11, 3)
     meal_filter = 1
     if now.hour < BREAKFAST_END_HOUR:
         meal_filter = 1
