@@ -7,18 +7,13 @@
             <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta names="apple-mobile-web-app-status-bar-style" content="black" />
-      	    <link rel="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
+      	    <link rel="stylesheet" type="text/css" href="/static/css/menu.css" media="all" />
             <link rel="stylesheet" type="text/css" href="/static/css/print.css" media="print" />
+            <link rel="icon" type="image/png" href="/static/i/favicon.png">
             <script src='/static/j/jquery.js'></script>
             <script src='/static/j/analytics.js'></script>
           </head>
           <body>
-            <div class="header">
-              <h1>Viewing {{menu.date}}, {{three_meals[menu.time_sort_key-1]}}</h1>
-              <div class="read-title">{{menu.name.decode('utf8')}}</div>
-              <a class="back button" href="/">Back to Menus</a>
-            </div>
-
             <div class="menu">
               <ul class="menu-list">
 	            {% for menu_item in menu_items %}
@@ -48,6 +43,11 @@
 	              </li>
                 {% endfor %}
               </ul>
+            </div>
+            <div class="header">
+              <h1>Viewing {{menu.date}}, {{three_meals[menu.time_sort_key-1]}}</h1>
+              <div class="read-title">{{menu.name.decode('utf8')}}</div>
+              <a class="back button" href="/">Back to Menus</a>
             </div>
           </body>
 </html>

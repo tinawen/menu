@@ -7,33 +7,13 @@
               <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
               <meta name="apple-mobile-web-app-capable" content="yes" />
               <meta names="apple-mobile-web-app-status-bar-style" content="black" />
-              <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
+              <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/menu.css" media="all" />
+              <link rel="icon" type="image/png" href="/static/i/favicon.png">
               <script src="/static/j/jquery.js"></script>
               <script src="/static/j/analytics.js"></script>
               <script src="/static/j/view_menus.js"></script>
             </head>
             <body class="index">
-              <div class="header">
-                <h1>All Menus</h1>
-                {% block head %}
-                  <a class="button long" href="https://www.google.com/calendar/render?cid=dropbox.com_a4mvuefvs56vpn3k0780pfh4t4@group.calendar.google.com">Import to Google Calendar</a>
-                  <div class="button feedback" id="submit-feedback">Website Feedback</div>
-                {% endblock head%}
-              </div>
-              <div class="head">
-                <div class="picker button">{{selected_month_string}}</div>
-                <ul class="nav">
-                  <div class="beak"></div>
-                  <span>
-                    {% block month_picker %}
-                      {% for month_menu in month_menus %}
-                        <li><a href="{{menus_monthly_url_prefix}}{{month_menu[0][1]}}/{{month_menu[0][0]}}">{{month_menu[1]}}</a></li>
-                      {% endfor %}
-                    {% endblock month_picker %}
-                  </span>
-                </ul>
-              </div>
-
               {% block populate_menus %}
                 <div class="menu index">
                   <ul class="menu-index">
@@ -52,6 +32,27 @@
                   </ul>
                 </div>
               {% endblock populate_menus %}
+
+              <div class="header">
+                <h1>All Menus</h1>
+                {% block head %}
+                  <a class="button" id="import-to-google-calendar" href="https://www.google.com/calendar/render?cid=dropbox.com_a4mvuefvs56vpn3k0780pfh4t4@group.calendar.google.com">Import to Google Calendar</a>
+                  <div class="button feedback" id="submit-feedback">Website Feedback</div>
+                {% endblock head%}
+              </div>
+              <div class="head">
+                <div class="picker button">{{selected_month_string}}</div>
+                <ul class="nav">
+                  <div class="beak"></div>
+                  <span>
+                    {% block month_picker %}
+                      {% for month_menu in month_menus %}
+                        <li><a href="{{menus_monthly_url_prefix}}{{month_menu[0][1]}}/{{month_menu[0][0]}}">{{month_menu[1]}}</a></li>
+                      {% endfor %}
+                    {% endblock month_picker %}
+                  </span>
+                </ul>
+              </div>
 
               {% block addMenu %}
               {% endblock addMenu %}

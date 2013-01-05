@@ -4,6 +4,7 @@
   <link href="/static/css/jquery-ui.css" rel="stylesheet" type="text/css"/>
   <script src="/static/j/edit_menus.js"></script>
   <script src="/static/j/jquery-ui.min.js"></script>
+  <link rel="icon" type="image/png" href="/static/i/favicon.png">
   <div class="button" id="add-menu">Add a Menu</div>
 {% endblock %}
 
@@ -14,27 +15,25 @@
       <div class="cancel">cancel</div>
       <label for="date">What day is this for?</label>
       <input type="text" id="datepicker" name="date" />
-      <div align="center"><br>
-	      <label for="time">Which meal of the day is this for?</label>
-	      {% for threeMeal in three_meals %}
-	        <div class="meal">
-	          <input type="radio" class="checkbox" name="time" id="{{threeMeal}}" value="{{loop.index}}">
-	            <label for="{{threeMeal}}" class="check-label">{{threeMeal}}</label>
-	        </div>
-	      {% endfor %}
-      </div>
-      <button type="submit" class="button floatright" name="submit">Add</button>
+	  <label for="time">Which meal of the day is this for?</label>
+	  {% for threeMeal in three_meals %}
+	    <span class="meal">
+	      <input type="radio" class="checkbox" name="time" id="{{threeMeal}}" value="{{loop.index}}" />
+	      <label for="{{threeMeal}}" class="check-label">{{threeMeal}}</label>
+        </span>
+	  {% endfor %}
+      <button type="submit" class="button" id="add-menu-submit" name="submit">Add</button>
     </form>
   </div>
 {% endblock %}
 
-{% block month_picker %}
-  {{ super() }}
-{% endblock month_picker %}
-
 {% block populate_menus %}
   {{ super() }}
 {% endblock populate_menus %}
+
+{% block month_picker %}
+  {{ super() }}
+{% endblock month_picker %}
 
 {% block feedbackform %}
 {% endblock %}

@@ -1,0 +1,458 @@
+body {
+  background: #eee;
+  font-family: Opensans, helvetica, sans-serif; }
+  body .header {
+    position: fixed;
+    left: 330px;
+    height: 70px;
+    width: 760px;
+    top: 0;
+    text-align: center;
+    background: #eee;
+    border: 6px solid #eee; }
+    body .header h1 {
+      font-size: 15px;
+      color: #999;
+      font-weight: normal;
+      margin-top: 15px;
+      margin-bottom: 0; }
+    body .header .read-title {
+      display: inline-block;
+      font-size: 16px;
+      color: #555;
+      font-weight: normal;
+      width: 400px;
+      margin-left: -140px;
+      margin-top: 2px;
+      margin-bottom: 2px;
+      padding: 5px; }
+    body .header input {
+      font-size: 16px;
+      color: #555;
+      border-radius: 5px;
+      text-align: center;
+      border: 4px solid #eee;
+      background: none;
+      width: 400px;
+      transition: all 0.2s ease-in-out 0;
+      -webkit-transition: all 0.2s ease-in-out 0;
+      -moz-transition: all 0.2s ease-in-out 0; }
+      body .header input:hover {
+        border: 4px solid rgba(0, 0, 0, 0.1); }
+      body .header input:focus {
+        background: #fff;
+        padding: 10px;
+        outline: none;
+        border: 3px solid rgba(0, 0, 0, 0.3); }
+    body .header #submit-feedback, body .header #add-menu, body .header #add-menu-item {
+      float: right;
+      right: 18px;
+      position: relative; }
+    body .header #add-menu-item {
+      top: -15px;
+      right: 18px; }
+    body .header #import-to-google-calendar {
+      float: right;
+      right: 18px;
+      width: 170px;
+      position: relative; }
+    body .header #add-menu {
+      right: 18px; }
+    body .header .back {
+      float: left;
+      position: relative;
+      left: 23px;
+      top: -15px; }
+
+.index .header h1 {
+  left: 36px;
+  top: 10px;
+  float: left;
+  position: relative;
+  font-size: 18px;
+  text-align: left; }
+.index .menu.index {
+  background-image: none;
+  margin-top: 114px;
+  padding-top: 0;
+  top: 0;
+  position: absolute; }
+.index .cancel {
+  display: none; }
+.index .feedback-form {
+  position: fixed;
+  height: 0;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 1; }
+  .index .feedback-form.display {
+    height: 100%;
+    opacity: 1; }
+    .index .feedback-form.display .cancel {
+      display: block; }
+  .index .feedback-form .feedbackf {
+    width: 760px;
+    border: 1px solid #999;
+    height: 700px;
+    position: absolute;
+    top: -1000px;
+    border-radius: 10px;
+    left: 300px;
+    background: #fff; }
+    .index .feedback-form .feedbackf.display {
+      top: 50px; }
+
+.modal-wrap {
+  background: rgba(250, 250, 250, 0.8);
+  height: 0;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  opacity: 0; }
+  .modal-wrap .modal {
+    width: 50%;
+    height: 400px;
+    border: 1px solid #999;
+    position: absolute;
+    top: -1000px;
+    border-radius: 10px;
+    left: 25%;
+    background: white; }
+    .modal-wrap .modal #add-menu-item-submit {
+      display: none; }
+
+.cancel {
+  background: black url("/static/i/x.png") 7px 7px no-repeat;
+  float: right;
+  border-radius: 100px;
+  border: 1px solid;
+  opacity: 0.3;
+  width: 24px;
+  height: 0;
+  padding-top: 24px;
+  overflow: hidden;
+  margin-right: 20px;
+  margin-top: 20px; }
+
+.modal-wrap.display {
+  height: 100%;
+  opacity: 1; }
+  .modal-wrap.display .modal.display {
+    top: 10%; }
+    .modal-wrap.display .modal.display h2 {
+      float: left;
+      font-size: 20px;
+      font-weight: normal;
+      margin: 20px 0 20px 35px; }
+    .modal-wrap.display .modal.display label, .modal-wrap.display .modal.display input {
+      display: block;
+      clear: left;
+      margin-left: 35px;
+      margin-top: 10px;
+      outline: none; }
+    .modal-wrap.display .modal.display input {
+      font-size: 14px;
+      border-radius: 5px;
+      width: 85%;
+      height: 30px;
+      margin-bottom: 10px; }
+    .modal-wrap.display .modal.display textarea {
+      outline: none;
+      font-size: 15px;
+      width: 85%;
+      height: 60px;
+      border: 1px solid #999;
+      background: #fff;
+      border-radius: 5px;
+      margin-left: 35px; }
+    .modal-wrap.display .modal.display .checkbox {
+      float: left;
+      width: 12px;
+      clear: none;
+      margin-bottom: 0; }
+    .modal-wrap.display .modal.display .check-label {
+      float: left;
+      clear: none;
+      margin-left: 10px;
+      font-size: 12px;
+      line-height: 30px; }
+    .modal-wrap.display .modal.display .allergens {
+      margin-bottom: 40px; }
+      .modal-wrap.display .modal.display .allergens .allergen {
+        float: left; }
+        .modal-wrap.display .modal.display .allergens .allergen input, .modal-wrap.display .modal.display .allergens .allergen label {
+          height: 20px; }
+        .modal-wrap.display .modal.display .allergens .allergen label {
+          line-height: 20px;
+          margin-left: 5px; }
+    .modal-wrap.display .modal.display .health-factor .healthy_level {
+      float: left; }
+      .modal-wrap.display .modal.display .health-factor .healthy_level input, .modal-wrap.display .modal.display .health-factor .healthy_level label {
+        height: 20px; }
+      .modal-wrap.display .modal.display .health-factor .healthy_level label {
+        line-height: 20px;
+        margin-left: 5px; }
+    .modal-wrap.display .modal.display #add-menu-submit, .modal-wrap.display .modal.display #add-menu-item-submit {
+      display: block;
+      float: right;
+      position: relative;
+      right: 20px;
+      border: 0; }
+    .modal-wrap.display .modal.display .cancel {
+      display: block; }
+
+.index .modal-wrap .modal {
+  height: 280px;
+  width: 500px;
+  left: 30%; }
+
+.head {
+  left: 369px;
+  top: 70px;
+  width: 700px;
+  height: 44px;
+  position: fixed;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  -moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.19), 0 2px 1px white, inset 0 1px 0 white;
+  -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.19), 0 2px 1px white, inset 0 1px 0 white;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.19), 0 2px 1px white, inset 0 1px 0 white;
+  background: rgba(240, 240, 240, 0.1);
+  /* fallback for old browsers */
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.9)), to(rgba(240, 240, 240, 0.1)));
+  /* webkit */
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.1));
+  /* firefox 3.6+ */
+  background-color: #eee;
+  line-height: 25px; }
+  .head .picker {
+    top: 71px; }
+  .head .nav {
+    position: absolute;
+    left: -18px;
+    top: 32px;
+    border: 1px solid #999;
+    width: 170px;
+    height: 200px;
+    background: rgba(213, 229, 255, 0.8);
+    -moz-box-shadow: 0 9px 16px rgba(0, 0, 0, 0.2) 0, 0 0 0 0, inset 1px 2px white black;
+    -webkit-box-shadow: 0 9px 16px rgba(0, 0, 0, 0.2) 0, 0 0 0 0, inset 1px 2px white black;
+    box-shadow: 0 9px 16px rgba(0, 0, 0, 0.2) 0, 0 0 0 0, inset 1px 2px white black;
+    display: none;
+    padding-left: 0;
+    border-radius: 5px; }
+  .head .nav.display {
+    display: block; }
+    .head .nav.display .beak {
+      background-image: url("/static/i/beak.png");
+      background-repeat: no-repeat;
+      width: 23px;
+      height: 8px;
+      position: absolute;
+      top: -9px;
+      left: 70px; }
+    .head .nav.display span {
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      margin: 4px;
+      height: 190px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      border-radius: 2px;
+      display: block; }
+      .head .nav.display span li {
+        list-style: none;
+        width: 298px;
+        background: rgba(255, 255, 255, 0.8); }
+        .head .nav.display span li a {
+          display: block;
+          padding: 10px;
+          font-size: 13px;
+          text-decoration: none;
+          color: #333;
+          border-bottom: 1px solid #ddd;
+          width: 278px; }
+
+.button {
+  color: #999;
+  font-size: 12px;
+  width: 120px;
+  top: 15px;
+  position: fixed;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.19), 0 2px 1px white, inset 0 1px 0 white;
+  -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.19), 0 2px 1px white, inset 0 1px 0 white;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.19), 0 2px 1px white, inset 0 1px 0 white;
+  margin: 10px;
+  line-height: 25px;
+  background: rgba(180, 180, 180, 0.19);
+  /* fallback for old browsers */
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.19)), to(rgba(180, 180, 180, 0.19)));
+  /* webkit */
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.19), rgba(180, 180, 180, 0.19));
+  /* firefox 3.6+ */
+  background-color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  text-align: center; }
+  .button:hover {
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.13), inset 0 0 0 1px rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.13), inset 0 0 0 1px rgba(0, 0, 0, 0.19);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.13), inset 0 0 0 1px rgba(0, 0, 0, 0.19);
+    background: rgba(0, 0, 0, 0.07);
+    /* fallback for old browsers */
+    background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.07)), to(rgba(0, 0, 0, 0.07)));
+    /* webkit */
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.07));
+    /* firefox 3.6+ */
+    background-color: #fff; }
+  .button:active {
+    -moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25), 0 2px 0 rgba(255, 255, 255, 0.48), inset 0 1px 3px rgba(0, 0, 0, 0.16);
+    -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25), 0 2px 0 rgba(255, 255, 255, 0.48), inset 0 1px 3px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25), 0 2px 0 rgba(255, 255, 255, 0.48), inset 0 1px 3px rgba(0, 0, 0, 0.16);
+    background: rgba(180, 180, 180, 0.33);
+    /* fallback for old browsers */
+    background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.33)), to(rgba(180, 180, 180, 0.33)));
+    /* webkit */
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.33), rgba(180, 180, 180, 0.33));
+    /* firefox 3.6+ */ }
+
+img {
+  vertical-align: bottom;
+  margin-right: 5px; }
+
+.menu-list {
+  padding: 2em 0.2em;
+  margin-top: 3em;
+  margin-bottom: 2em;
+  text-align: center; }
+  .menu-list li {
+    list-style: none; }
+  .menu-list .dish {
+    padding: 20px 50px 0;
+    width: 30em;
+    margin: 0 10px 0;
+    display: inline-block; }
+    .menu-list .dish .dish-title {
+      font-size: 16px;
+      font-weight: normal;
+      padding: 0 0 0.2em 4px; }
+    .menu-list .dish .description {
+      font-size: 13px;
+      color: #888;
+      padding: 5px 5px 0;
+      margin: 2px 4px;
+      overflow: visible; }
+    .menu-list .dish .allergen-images {
+      padding-top: 4px; }
+
+.menu {
+  -moz-box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1), inset 0 0 0 black;
+  -webkit-box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1), inset 0 0 0 black;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1), inset 0 0 0 black;
+  border: 1px solid #aaa;
+  position: absolute;
+  top: 80px;
+  left: 368px;
+  width: 700px;
+  background: white url("/static/i/logo.png") center 50px no-repeat;
+  overflow: auto;
+  margin-top: 5px;
+  margin-bottom: 20px; }
+  .menu .menu-list .dish .actions {
+    display: block;
+    width: 100%;
+    height: 0;
+    visibility: hidden; }
+    .menu .menu-list .dish .actions .cancel {
+      position: relative;
+      left: 70px;
+      bottom: 140px;
+      float: right; }
+    .menu .menu-list .dish .actions .move {
+      position: relative;
+      left: -300px;
+      bottom: 100px;
+      background: url("/static/i/arrows.png") no-repeat;
+      float: left;
+      opacity: 0.1;
+      width: 30px;
+      height: 0;
+      padding-top: 30px;
+      overflow: hidden; }
+  .menu .menu-list .dish:hover .actions {
+    visibility: visible; }
+  .menu .menu-list .dish input.dish-title {
+    font-size: 16px;
+    color: #555;
+    border: 4px solid #fff;
+    border-radius: 5px;
+    width: 100%;
+    transition: all 0.2s ease-in-out 0;
+    -webkit-transition: all 0.2s ease-in-out 0;
+    -moz-transition: all 0.2s ease-in-out 0; }
+    .menu .menu-list .dish input.dish-title:hover {
+      border: 4px solid rgba(0, 0, 0, 0.1); }
+    .menu .menu-list .dish input.dish-title:focus {
+      padding: 10px;
+      border: 3px solid rgba(0, 0, 0, 0.3);
+      outline: none; }
+  .menu .menu-list .dish textarea.description {
+    border: 4px solid #fff;
+    border-radius: 5px;
+    width: 100%;
+    transition: all 0.2s ease-in-out 0;
+    -webkit-transition: all 0.2s ease-in-out 0;
+    -moz-transition: all 0.2s ease-in-out 0; }
+    .menu .menu-list .dish textarea.description:hover {
+      border: 4px solid rgba(0, 0, 0, 0.1); }
+    .menu .menu-list .dish textarea.description:focus {
+      padding: 10px;
+      border: 4px solid rgba(0, 0, 0, 0.3);
+      outline: none; }
+  .menu .menu-list .dish .allergens {
+    width: 100%;
+    font-size: 11px; }
+    .menu .menu-list .dish .allergens input {
+      float: left;
+      margin-left: 10px; }
+    .menu .menu-list .dish .allergens label {
+      float: left;
+      margin-top: 2px;
+      margin-right: 5px; }
+  .menu .menu-list .dish .health-factor {
+    clear: left; }
+    .menu .menu-list .dish .health-factor input, .menu .menu-list .dish .health-factor label {
+      float: left; }
+    .menu .menu-list .dish .health-factor label {
+      margin-left: 2px;
+      margin-top: 3px; }
+  .menu ul.menu-index {
+    padding-left: 0; }
+  .menu .menu-index {
+    margin-top: 0; }
+    .menu .menu-index li {
+      list-style: none;
+      width: 700px;
+      float: left;
+      border-bottom: 1px solid #eee; }
+      .menu .menu-index li a {
+        width: 660px;
+        float: left;
+        text-decoration: none;
+        color: #777;
+        padding: 15px 20px; }
+      .menu .menu-index li .date {
+        float: right;
+        color: #aaa;
+        font-size: 12px;
+        padding-top: 4px; }
+    .menu .menu-index .divider {
+      background: #eee; }
+      .menu .menu-index .divider .divider-title {
+        padding: 5px;
+        text-align: center;
+        font-size: 13px;
+        color: #999; }

@@ -7,19 +7,13 @@
             <meta name="viewport" content="width=720, height=1280, initial-scale=.5, maximum-scale=.5, minimum-scale=.5" />
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta names="apple-mobile-web-app-status-bar-style" content="black" />
-            <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/styles.css" media="all" />
+            <link rel="stylesheet" title="stylesheet" type="text/css" href="/static/css/menu.css" media="all" />
+            <link rel="icon" type="image/png" href="/static/i/favicon.png">
             <script src="/static/j/jquery.js"></script>
             <script src="/static/j/jquery-ui-1.8.21.custom.min.js"></script>
             <script src="/static/j/edit_menu.js"></script>
           </head>
           <body>
-            <div class="header">
-	          <h1>Editing {{menu.date}}, {{three_meals[menu.time_sort_key-1]}}</h1>
-	          <input type="text" class="title" id="menuTitle" value="{{menu.name.decode('utf8')}}" menu_id="{{menu.id}}" />
-	          <div class="button" id="add-menu-item">Add a Dish</div>
-	          <a class="back button" href="/edit">Back to Menus</a>
-            </div>
-
             <div class="menu">
 	          <ul id="sortable" class="menu-list" menu_id={{menu.id}}>
 	            {% for menu_item in menu_items %}
@@ -37,7 +31,7 @@
 		                {% endif %}
 		                <label class="check-label" for="city">{{allergen}}</label>
 		              {% endfor %}
-		              <div align="center">
+		              <div class="health-factor">
                         <br />
 		                {% for healthy_level in healthy_factor %}
 			              {% if menu_item.healthy == loop.index %}
@@ -48,17 +42,23 @@
 			              <label for="{{healthy_level}}" class="check-label">{{healthy_level}}</label>
 			            {% endfor %}
 		              </div>
-		              <br class="clear" />
 	                </div>
 	                <div class="actions">
-                      <a href="#" class="move circle-button"></a>
-                      <div id="delete-menu" class="delete circle-button" menu_item_id="{{menu_item.id}}">Delete</div>
+                      <a href="#" class="move"></a>
+                      <div class="cancel delete" menu_item_id="{{menu_item.id}}">Delete</div>
                     </div>
                   </li>
                 {% endfor %}
 	          </ul>
 	        </div>
-		    <div class="modal-wrap" id="add-menu-item-modal-wrap">
+		    <div class="header">
+	          <h1>Editing {{menu.date}}, {{three_meals[menu.time_sort_key-1]}}</h1>
+	          <input type="text" class="title" id="menuTitle" value="{{menu.name.decode('utf8')}}" menu_id="{{menu.id}}" />
+	          <div class="button" id="add-menu-item">Add a Dish</div>
+	          <a class="back button" href="/edit">Back to Menus</a>
+            </div>
+
+            <div class="modal-wrap" id="add-menu-item-modal-wrap">
 		      <form class="adding modal" id="add-menu-item-modal" action="{{ create_menu_item_url }}">
 		        <h2>Add a Dish</h2>
 		        <a class="cancel" href="#">cancel</a>
@@ -75,19 +75,18 @@
 			          <label class="check-label" for="checkbox">{{allergen}}</label>
 			        </div>
 			      {% endfor %}
-			      <label>Health Factor</label>
-			      <div align="center">
-                    <br />
-			        {% for healthy_level in healthy_factor %}
-			          <div class="healthy_level">
-			            <input type="radio" class="checkbox" name="healthy" id="{{healthy_level}}" value="{{loop.index}}" />
-				        <label for="{{healthy_level}}" class="check-label">{{healthy_level}}</label>
-			          </div>
-			        {% endfor %}
-			      </div>
+                  </div>
+			    <label>Health Factor</label>
+			    <div class="health-factor">
+			      {% for healthy_level in healthy_factor %}
+			        <div class="healthy_level">
+			          <input type="radio" class="checkbox" name="healthy" id="{{healthy_level}}" value="{{loop.index}}" />
+				      <label for="{{healthy_level}}" class="check-label">{{healthy_level}}</label>
+			        </div>
+			      {% endfor %}
 			    </div>
 				<br />
-				<button type="submit" class="button floatright" name="submit">Add</buttton>
+				<button type="submit" class="button" id="add-menu-item-submit" name="submit">Add</buttton>
 			  </form>
 		    </div>
           </body>

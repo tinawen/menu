@@ -1,0 +1,29 @@
+body.display {
+    min-height: 100%;
+    background: #fff url("/static/i/logo.png") center 50px no-repeat;
+
+    .menu-list {
+        margin: 3em 0;
+        padding: 3em 0.2em;
+
+        .dish {
+            display: inline-block;
+            vertical-align: top;
+            padding: 10px 10px 50px;
+            margin: 10px 10px 0;
+            width: 24em;
+            .dish-title {
+                font-size: 1.6em;
+            }
+
+            .description {
+                font-size: 1.2em;
+            }
+
+            .dish-allergen {
+                width: 1.2em;
+                height: 1.2em;
+            }
+        }
+    }
+}
