@@ -33,8 +33,9 @@ def get_menu_name(menu):
         menu_name = menu_name + ': ' + menu.name
     return menu_name
 
-def get_menu_desc(menu, for_calendar):
+def get_menu_desc(menu, for_calendar, is_json=False):
     desc = ''
+    json_result = []
     if len(menu.menus) < 1:
         return ''
     for menu_item_id in menu.menus.split(' '):
@@ -42,8 +43,9 @@ def get_menu_desc(menu, for_calendar):
         allergens = DBSession.query(Allergen).filter(Allergen.menu_item_id==menu_item.id).all()
         allergen_string = ', '.join([a.allergen for a in allergens])
         desc = '\n' + desc
-        desc = desc + menu_item.name.decode('utf8')
-        if menu_item.healthy:
+        menu_item_name = menu_item.name.decode('utf8')
+        desc = desc + menu_item_name
+        if (not is_json) and menu_item.healthy:
             if for_calendar:
                 desc = desc + '\n' + health_icon[menu_item.healthy-1].decode('utf8') + ' ' + HEALTHY_FACTOR[menu_item.healthy-1] + ' '
             else:
@@ -51,9 +53,13 @@ def get_menu_desc(menu, for_calendar):
 
         desc = desc + '\n'
         if len(menu_item.description.decode('utf8')):
-            desc = desc + menu_item.description.decode('utf8') + '\n'
+            menu_item_desc = menu_item.description.decode('utf8')
+            desc = desc + menu_item_desc + '\n'
         if len(allergen_string):
             desc = desc + '(' + allergen_string + ')\n\n'
+        json_result.append((menu_item_name, menu_item_desc))
+    if is_json:
+        return json.dumps(json_result)
     return desc.strip('\n')
 
 def update_menu_on_google_calendar(menu):

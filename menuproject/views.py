@@ -334,10 +334,8 @@ def update_menu_item_healthy(request):
     menuItem.update({"healthy":int(request.params['healthy'])})
     return 'ok'
 
-#for displaying the daily menu
-@view_config(route_name='daily_menu', renderer='templates/daily_menu.jinja2')
-def daily_menu(request):
-    #find the menu to display
+def get_daily_menu():
+#find the menu to display
     now = datetime.datetime.now()
     today = now.strftime('%Y-%m-%d')
     # for testing
@@ -358,9 +356,26 @@ def daily_menu(request):
     if menu is None:
         menu = DBSession.query(Menu).order_by(-Menu.date).order_by(-Menu.time_sort_key).first()
     if menu is None:
+        return None
+    return menu
+
+#for displaying the daily menu
+@view_config(route_name='daily_menu', renderer='templates/daily_menu.jinja2')
+def daily_menu(request):
+    menu = get_daily_menu()
+    if menu:
+        return refresh_menu(menu)
+    else:
         return dict()
 
-    return refresh_menu(menu)
+# daily menu api
+@view_config(route_name='daily_menu_json', renderer="json")
+def daily_menu_json(request):
+    menu = get_daily_menu()
+    if menu:
+        return get_menu_desc(menu, False, True)
+    else:
+        return ''
 
 conn_err_msg = """\
 Pyramid is having a problem using your SQL database.  The problem

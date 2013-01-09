@@ -11,6 +11,7 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('daily_menu', '/daily')
+    config.add_route('daily_menu_json', '/api/daily')
     config.add_route('view_menus', '/view_menus/{menu_year}/{menu_month}')
     config.add_route('view_menu', '/menu/{menu_id}')
     config.add_route('view_menus_today', '/')
