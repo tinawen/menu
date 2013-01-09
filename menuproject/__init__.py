@@ -1,6 +1,6 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
-
+from pyramid.renderers import JSONP
 from .models import DBSession
 
 def main(global_config, **settings):
@@ -31,6 +31,7 @@ def main(global_config, **settings):
     config.add_route('publish', '/publish/{menu_id}')
     config.include('pyramid_jinja2')
     config.include('pyramid_mailer')
+    config.add_renderer('jsonp', JSONP(param_name='callback'))
     config.scan()
     return config.make_wsgi_app()
 

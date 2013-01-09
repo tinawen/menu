@@ -369,7 +369,7 @@ def daily_menu(request):
         return dict()
 
 # daily menu api
-@view_config(route_name='daily_menu_json', renderer="json")
+@view_config(route_name='daily_menu_json', renderer="jsonp")
 def daily_menu_json(request):
     menu = get_daily_menu()
     if menu:
