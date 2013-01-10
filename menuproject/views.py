@@ -11,6 +11,7 @@ import calendar
 import operator
 from gcalendar import get_menu_name
 from gcalendar import get_menu_desc
+from gcalendar import get_menu_json
 from gcalendar import update_menu_on_google_calendar
 from gcalendar import THREE_MEALS
 from gcalendar import HEALTHY_FACTOR
@@ -373,7 +374,7 @@ def daily_menu(request):
 def daily_menu_json(request):
     menu = get_daily_menu()
     if menu:
-        return get_menu_desc(menu, False, True)
+        return get_menu_json(menu)
     else:
         return ''
 
