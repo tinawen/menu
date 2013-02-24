@@ -1,0 +1,11 @@
+ex*.log
+*.*~
+*.pid
+build/*
+MenuProject.egg-info/*
+*.pyc
+dist/*
+.hg/*
+menu_backup/*
+*.ini
+#*#

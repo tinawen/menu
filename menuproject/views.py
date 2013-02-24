@@ -75,7 +75,7 @@ def build_months_menu():
 # update menu on google calendar
 def update_gcalendar(menu):
     if not debug_mode():
-        os.spawnl(os.P_WAIT, '/usr/bin/python', 'python', GCALENDAR_PATH, '154')
+        os.spawnl(os.P_WAIT, '/usr/bin/python', 'python', GCALENDAR_PATH, str(menu.id))
 
 #send an email about the menu
 @view_config(route_name='publish', renderer='string')
