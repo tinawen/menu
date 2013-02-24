@@ -10,7 +10,7 @@ from pyramid.paster import (
     get_appsettings,
     setup_logging,
     )
- 
+
 from ..gcalendar import delete_all
 from ..gcalendar import update_menu_on_google_calendar
 
@@ -25,7 +25,7 @@ from ..models import (
 def usage(argv):
     cmd = os.path.basename(argv[0])
     print('usage: %s <config_uri>\n'
-          '(example: "%s development.ini")' % (cmd, cmd)) 
+          '(example: "%s development.ini")' % (cmd, cmd))
     sys.exit(1)
 
 def main(argv=sys.argv):
@@ -51,14 +51,14 @@ def main(argv=sys.argv):
             print 'menu_item is %r'%menu_item
         print "hello done"
         serialized_allergens = serialized_data["allergens"]
-        allergens = loads(serialized_allergens, Base.metadata, DBSession) 
+        allergens = loads(serialized_allergens, Base.metadata, DBSession)
         for allergen in allergens:
             DBSession.merge(allergen)
         serialized_menus = serialized_data["menus"]
         menus = loads(serialized_menus, Base.metadata, DBSession)
         for menu in menus:
             DBSession.merge(menu)
- #           update_menu_on_google_calendar(menu)
+ #           update_menu_on_google_calendar(menu.id)
 
 
 

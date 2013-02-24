@@ -30,6 +30,7 @@ from models import (
     )
 
 PRODUCTION_FILE_PATH = '/home/tina/production_mode.txt'
+GCALENDAR_PATH = '/home/tina/MenuProject/menuproject/gcalendar.py'
 MAIL_SECRETS = '/home/tina/mail_secrets.json'
 ALLERGENS = ["Shellfish", "Nuts", "Dairy", "Spicy", "Vegan", "Gluten-free", "Alcohol"]
 BREAKFAST_END_HOUR = 9
@@ -73,7 +74,7 @@ def build_months_menu():
 # update menu on google calendar
 def update_gcalendar(menu):
     if not debug_mode():
-        update_menu_on_google_calendar(menu)
+        os.spawnl(os.P_WAIT, '/usr/bin/python', 'python', GCALENDAR_PATH, '154')
 
 #send an email about the menu
 @view_config(route_name='publish', renderer='string')

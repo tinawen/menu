@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import httplib2
 import sys
 import urllib2
@@ -8,6 +10,7 @@ from oauth2client.file import Storage
 from oauth2client.client import AccessTokenRefreshError
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.tools import run
+from sqlalchemy import engine_from_config
 
 from models import (
     DBSession,
@@ -15,6 +18,11 @@ from models import (
     Menu,
     Allergen,
     )
+
+from pyramid.paster import (
+    get_appsettings,
+)
+
 
 CALENDAR_ID = '/home/tina/client_secrets.json'
 CLIENT_SECRETS = '/home/tina/credentials.dat'
@@ -25,6 +33,11 @@ HEALTHY_FACTOR = ["Healthy", "Moderate", "Unhealthy"]
 #three entries correspond to breskfast, lunch, dinner
 #first number is the start time, second number is the end time
 CALENDAR_MEAL_TIMES = [['09', '11'], ['13', '15'], ['19', '21']]
+
+config_uri = "/home/tina/MenuProject/development.ini"
+settings = get_appsettings(config_uri)
+engine = engine_from_config(settings, 'sqlalchemy.')
+DBSession.configure(bind=engine)
 
 def get_menu_name(menu):
     meal = THREE_MEALS[int(menu.time_sort_key-1)]
@@ -62,7 +75,7 @@ def get_menu_desc(menu, for_calendar, is_json=False):
         return json.dumps(json_result)
     return desc.strip('\n')
 
-def update_menu_on_google_calendar(menu):
+def update_menu_on_google_calendar(menu_id):
     try:
         with open(CLIENT_SECRETS) as f: pass
     except IOError as e:
@@ -80,6 +93,11 @@ def update_menu_on_google_calendar(menu):
     service = build('calendar', 'v3', http=http)
 
     try:
+        #validate input
+        menu_query = DBSession.query(Menu).filter(Menu.id==int(menu_id))
+        if menu_query.count() != 1:
+            return
+        menu = menu_query.one()
         time = int(menu.time_sort_key)
         meal = THREE_MEALS[time-1]
         start_time = CALENDAR_MEAL_TIMES[time-1][0]
@@ -154,3 +172,6 @@ def delete_all():
         credentials.refresh(httplib2.Http())
         print ('The credentials have been revoked or expired, please re-run'
                'the application to re-authorize')
+
+if __name__ == '__main__':
+    update_menu_on_google_calendar(sys.argv[1])
