@@ -65,6 +65,7 @@ def get_menu_desc(menu, for_calendar):
                 desc = desc + '\n' + '(' + HEALTHY_FACTOR[menu_item.healthy-1] + ') '
 
         desc = desc + '\n'
+        menu_item_desc = ''
         if len(menu_item.description.decode('utf8')):
             menu_item_desc = menu_item.description.decode('utf8')
             desc = desc + menu_item_desc + '\n'
