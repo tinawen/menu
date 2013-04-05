@@ -69,7 +69,7 @@ def build_months_dict():
 def build_months_menu():
     month_year_to_string_mapping = build_months_dict()
     #sort based on the dictionary keys
-    sorted_months_years = sorted(month_year_to_string_mapping.iteritems(), key=operator.itemgetter(0))
+    sorted_months_years = sorted(month_year_to_string_mapping.items(), key=lambda (x): x[0][0]+(x[0][1]-2012)*12, reverse=True)
     return sorted_months_years
 
 # update menu on google calendar
@@ -181,6 +181,10 @@ def create_menu(request):
     menu = DBSession.query(Menu).filter(Menu.date==request.params['date']).filter(Menu.time_sort_key==int(request.params['time'])).first()
     #if not, create one
     if menu is None:
+        # verify date
+        date = request.params['date']
+        if date is '0000-00-00':
+            return HTTPFound(location= request.route_url('edit_menus_today'))
         menu = Menu(name='', date=request.params['date'], time_sort_key=request.params['time'], menus='', sent=False)
         DBSession.add(menu)
         DBSession.flush()

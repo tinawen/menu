@@ -32,7 +32,7 @@ THREE_MEALS = ['Breakfast', 'Lunch', 'Dinner']
 HEALTHY_FACTOR = ["Healthy", "Moderate", "Unhealthy"]
 #three entries correspond to breskfast, lunch, dinner
 #first number is the start time, second number is the end time
-CALENDAR_MEAL_TIMES = [['09', '11'], ['13', '15'], ['19', '21']]
+CALENDAR_MEAL_TIMES = [['08', '10'], ['12', '14'], ['18', '20']]
 
 config_uri = "/home/tina/MenuProject/development.ini"
 settings = get_appsettings(config_uri)
@@ -134,10 +134,12 @@ def update_menu_on_google_calendar(menu_id):
             'summary': get_menu_name(menu),
             'location': 'Tuckshop',
             'start': {
-                'dateTime': str(menu.date) + 'T' + start_time + ':00:00.000-07:00'
+                'dateTime': str(menu.date) + 'T' + start_time + ':00:00.000-07:00',
+                'timeZone': 'GMT'
                 },
             'end': {
-                    'dateTime': str(menu.date) + 'T' + end_time + ':00:00.000-07:00'
+                    'dateTime': str(menu.date) + 'T' + end_time + ':00:00.000-07:00',
+                    'timeZone': 'GMT'
                 },
             'description': menu_description,
             }
