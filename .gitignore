@@ -9,4 +9,4 @@ dist/*
 menu_backup/*
 *.ini
 #*#
-wwdc.py
+wwdc.*
