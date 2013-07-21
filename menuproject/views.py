@@ -295,12 +295,16 @@ def attach_pictures(request):
         data = json.loads(request.params["data"])
         for image_info in data:
             image, thumb = image_info
-            new_image = Image(image_url=image, thumb_url=thumb)
-            added_thumbs.append(thumb)
-            DBSession.add(new_image)
-            DBSession.flush()
-            DBSession.refresh(new_image)
-            images_id.append(new_image.id)
+            if not image or not thumb:
+                continue
+            ext = os.path.splitext(image)[-1].lower()
+            if ext in (".jpg", ".jpeg", ".png"):
+                new_image = Image(image_url=image, thumb_url=thumb)
+                added_thumbs.append(thumb)
+                DBSession.add(new_image)
+                DBSession.flush()
+                DBSession.refresh(new_image)
+                images_id.append(new_image.id)
         menu_query.update({
                 "images_id": ' '.join([str(i) for i in images_id]),
                 })
