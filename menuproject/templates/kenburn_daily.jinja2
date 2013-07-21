@@ -1,0 +1,10 @@
+<html>
+  <link rel="stylesheet" type="text/css" href="/static/css/kenburns.css" media="all" />
+  <div id="slideshow">
+    {% for image in images %}
+      <img src="{{ image }}" alt="" />
+    {% endfor %}
+  </div>
+  <script src="/static/j/jquery.js"></script>
+  <script src="/static/j/kenburns.js"></script>
+</html>
