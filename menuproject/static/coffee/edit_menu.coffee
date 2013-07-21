@@ -70,3 +70,31 @@ $ ->
           data:"menu_ids=" + new_order
     $("#sortable").disableSelection()
 
+    $("#db-chooser").get(0).addEventListener "DbxChooserSuccess", (e) ->
+      images = []
+      for file in e.files
+        images.push [file.link, file.thumbnails['64x64']]
+      menu_id = $(".menu ul").attr("menu_id")
+
+      $.ajax
+        type: "POST"
+        url: "/attach_pictures/" + menu_id
+        data: "data=" + JSON.stringify(images)
+      .success (data) ->
+        data = JSON.parse data
+        for thumb in data
+          image_cell = $('<span />').addClass("image-cell")
+          $('<div />').addClass("cancel").addClass("delete-thumb").appendTo image_cell
+          $('<img />').attr("src", thumb).appendTo image_cell
+          image_cell.appendTo $(".thumbs")
+
+    $('.delete-thumb').click ->
+      menu_id = $(".menu ul").attr("menu_id")
+      img_url = $(this).next().attr("src")
+      $.ajax
+        type: "POST"
+        url: "/delete_picture/" + menu_id
+        data: "data=" + JSON.stringify(img_url)
+      .success (data) ->
+        thumb = $(".thumbs").find('img[src$="' + data + '"]')
+        thumb.parent().remove()

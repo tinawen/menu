@@ -2,7 +2,7 @@
 (function() {
     (function(){
         document.getElementById('slideshow').getElementsByTagName('img')[0].className = "fx";
-        window.setInterval(kenBurns, 8000);
+        window.setInterval(kenBurns, 10000);
         var images         = document.getElementById('slideshow').getElementsByTagName('img'),
             numberOfImages = images.length,
             i              = 1;

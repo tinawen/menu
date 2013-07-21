@@ -31,7 +31,7 @@ class MenuItem(Base):
         self.description = description
         self.menu_id = menu_id
         self.healthy = healthy
-        
+
 class Menu(Base):
     __tablename__ = 'menus'
     id = Column(Integer, primary_key=True)
@@ -40,13 +40,15 @@ class Menu(Base):
     time_sort_key = Column(Integer)
     menus = Column(Text)
     sent = Column(Boolean)
+    images_id = Column(Text)
 
-    def __init__(self, name, date, time_sort_key, menus, sent):
+    def __init__(self, name, date, time_sort_key, menus, sent, images_id):
         self.name = name
         self.date = date
         self.time_sort_key = time_sort_key
         self.menus = menus
         self.sent = sent
+        self.images_id = images_id
 
 class Allergen(Base):
     __tablename__ = 'allergens'
@@ -58,4 +60,14 @@ class Allergen(Base):
         self.menu_item_id = menu_item_id
         self.allergen = allergen
 
-    
+class Image(Base):
+    __tablename__ = 'images'
+    id = Column(Integer, primary_key=True)
+    image_url = Column(Text)
+    thumb_url = Column(Text)
+
+    def __init__(self, image_url, thumb_url):
+        self.image_url = image_url
+        self.thumb_url = thumb_url
+
+

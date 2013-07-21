@@ -12,9 +12,24 @@
             <script src="/static/j/jquery.js"></script>
             <script src="/static/j/jquery-ui-1.8.21.custom.min.js"></script>
             <script src="/static/j/edit_menu.js"></script>
+            <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropins.js" id="dropboxjs" data-app-key="cmwfxluk0dsb0dd"></script>
           </head>
           <body>
             <div class="menu">
+              <div id="image-chooser">
+                <div>
+                    Choose Today's Pictures
+                </div>
+                <input type="dropbox-chooser" name="selected-file" style="visibility: hidden;" id="db-chooser" data-link-type="direct" data-multiselect=true />
+                <div class="thumbs">
+                  {% for thumb in thumbs %}
+                    <span class="image-cell">
+                      <div class="cancel delete-thumb"></div>
+                      <img src="{{ thumb }}" />
+                    </span>
+                  {% endfor %}
+                </div>
+	          </div>
 	          <ul id="sortable" class="menu-list" menu_id={{menu.id}}>
 	            {% for menu_item in menu_items %}
 	              <li class="dish" id={{menu_item.id}}>
@@ -50,7 +65,7 @@
                   </li>
                 {% endfor %}
 	          </ul>
-	        </div>
+            </div>
 		    <div class="header">
 	          <h1>Editing {{menu.date}}, {{three_meals[menu.time_sort_key-1]}}</h1>
 	          <input type="text" class="title" id="menuTitle" value="{{menu.name.decode('utf8')}}" menu_id="{{menu.id}}" />

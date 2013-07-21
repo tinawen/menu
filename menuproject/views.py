@@ -28,6 +28,7 @@ from models import (
     MenuItem,
     Menu,
     Allergen,
+    Image,
     )
 
 PRODUCTION_FILE_PATH = '/home/tina/production_mode.txt'
@@ -172,6 +173,14 @@ def edit_menu(request):
     return_params['allergen_list'] = ALLERGENS
     return_params['healthy_factor'] = HEALTHY_FACTOR
     return_params['create_menu_item_url'] = '/create_menu_item/'+ str(menu.id)
+    images_id = menu.images_id
+    if images_id:
+        images_id = images_id.split(' ')
+        images = DBSession.query(Image).filter(Image.id.in_(images_id)).all()
+        images = [image.thumb_url for image in images]
+    else:
+        images = []
+    return_params['thumbs'] = images
     return return_params
 
 #create a menu
@@ -258,6 +267,44 @@ def update_menu_name(request):
     update_gcalendar(menu_query.one())
 
     return json.dumps(menu_query.one().name.decode('utf8'))
+
+@view_config(route_name='delete_picture', renderer='json')
+def delete_picture(request):
+    menu_query = DBSession.query(Menu).filter(Menu.id==request.matchdict['menu_id'])
+    images_id = menu_query.one().images_id
+    images_id = images_id.split(' ') if images_id else []
+
+    if "data" in request.params:
+        thumb_url = json.loads(request.params["data"])
+        image = DBSession.query(Image).filter(Image.thumb_url==thumb_url).filter(Image.id.in_(images_id)).one()
+        images_id.remove(str(image.id))
+        images_id = ' '.join([str(i) for i in images_id])
+        menu_query.update({"images_id": images_id}, synchronize_session=False)
+        DBSession.delete(image)
+        return thumb_url
+
+@view_config(route_name='attach_pictures', renderer='json')
+def attach_pictures(request):
+    menu_query = DBSession.query(Menu).filter(Menu.id==request.matchdict['menu_id'])
+    images_id = menu_query.one().images_id
+    images_id = images_id.split(' ') if images_id else []
+    if images_id:
+        images = DBSession.query(Image).filter(Image.id.in_(images_id)).all()
+    added_thumbs = []
+    if "data" in request.params:
+        data = json.loads(request.params["data"])
+        for image_info in data:
+            image, thumb = image_info
+            new_image = Image(image_url=image, thumb_url=thumb)
+            added_thumbs.append(thumb)
+            DBSession.add(new_image)
+            DBSession.flush()
+            DBSession.refresh(new_image)
+            images_id.append(new_image.id)
+        menu_query.update({
+                "images_id": ' '.join([str(i) for i in images_id]),
+                })
+    return json.dumps(added_thumbs)
 
 #deleting a menu item
 @view_config(route_name='delete_menu_item', renderer='string')
@@ -364,6 +411,17 @@ def get_daily_menu():
     if menu is None:
         return None
     return menu
+
+#for displaying the daily menu on big screen with ken burn effect
+@view_config(route_name='screen', renderer='templates/kenburn_daily.jinja2')
+def screen(request):
+    menu = get_daily_menu()
+    if menu.images_id:
+        images_id = menu.images_id.split(' ')
+        images = DBSession.query(Image).filter(Image.id.in_(images_id)).all()
+        file_paths = [image.image_url for image in images]
+        return dict(images=file_paths)
+    return dict()
 
 #for displaying the daily menu
 @view_config(route_name='daily_menu', renderer='templates/daily_menu.jinja2')

@@ -17,13 +17,13 @@
   margin-top:-960px;
   opacity:0;
   -webkit-transition-property: opacity, -webkit-transform;
-  -webkit-transition-duration: 3s, 8s;
+  -webkit-transition-duration: 3s, 20s;
   -moz-transition-property: opacity, -moz-transform;
-  -moz-transition-duration: 3s, 8s;
+  -moz-transition-duration: 3s, 20s;
   -o-transition-property: opacity, -o-transform;
-  -o-transition-duration: 3s, 8s;
+  -o-transition-duration: 3s, 20s;
   transition-property: opacity, transform;
-  transition-duration: 3s, 8s;
+  transition-duration: 3s, 20s;
 }
 #slideshow img  {
   -webkit-transform-origin: bottom left;

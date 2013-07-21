@@ -594,4 +594,25 @@ img {
             }
         }
     }
+
+    #image-chooser {
+        text-align: center;
+        border-bottom: 1px solid #444;
+        margin-top: 100px;
+        padding: 15px 0 15px 0;
+        .dropbox-chooser {
+            margin: 10px auto;
+        }
+        .image-cell {
+            display: inline-block;
+            margin: 0 10px;
+            .cancel {
+                float: none;
+                position: relative;
+                right: 15px;
+                top: 10px;
+                cursor: pointer;
+            }
+        }
+    }
 }
