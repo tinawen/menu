@@ -42,7 +42,7 @@ class Menu(Base):
     sent = Column(Boolean)
     images_id = Column(Text)
 
-    def __init__(self, name, date, time_sort_key, menus, sent, images_id):
+    def __init__(self, name, date, time_sort_key, menus, sent, images_id=None):
         self.name = name
         self.date = date
         self.time_sort_key = time_sort_key
