@@ -29,10 +29,11 @@ HEALTH_COLORS = ['green', 'orange', 'red']
 BREAKFAST_LUNCH_CUTOFF_HOUR = 10
 LUNCH_DINNER_CUTOFF_HOUR = 14
 
-config_uri = "/home/tina/MenuProject/development.ini"
-settings = get_appsettings(config_uri)
-engine = engine_from_config(settings, 'sqlalchemy.')
-DBSession.configure(bind=engine)
+if __name__ == '__main__':
+    config_uri = "/home/tina/MenuProject/production.ini"
+    settings = get_appsettings(config_uri)
+    engine = engine_from_config(settings, 'sqlalchemy.')
+    DBSession.configure(bind=engine)
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d') 

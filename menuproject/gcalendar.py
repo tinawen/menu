@@ -36,11 +36,6 @@ HEALTHY_FACTOR = ["Healthy", "Moderate", "Unhealthy"]
 #CALENDAR_MEAL_TIMES = [['09', '11'], ['13', '15'], ['19', '21']]
 CALENDAR_MEAL_TIMES = [['08', '10'], ['12', '14'], ['18', '20']]
 
-config_uri = "/home/tina/MenuProject/development.ini"
-settings = get_appsettings(config_uri)
-engine = engine_from_config(settings, 'sqlalchemy.')
-DBSession.configure(bind=engine)
-
 def get_menu_name(menu):
     meal = THREE_MEALS[int(menu.time_sort_key-1)]
     cafe_name = DBSession.query(Cafe).filter(Cafe.id==menu.cafe_id).one().name
@@ -196,6 +191,3 @@ def delete_all():
         credentials.refresh(httplib2.Http())
         print ('The credentials have been revoked or expired, please re-run'
                'the application to re-authorize')
-
-if __name__ == '__main__':
-    update_menu_on_google_calendar(sys.argv[1], sys.argv[2])

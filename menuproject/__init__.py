@@ -7,6 +7,7 @@ def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
     engine = engine_from_config(settings, 'sqlalchemy.')
+    print "BINDING TO ENGINE", engine.url
     DBSession.configure(bind=engine)
     config = Configurator(settings=settings)
     config.add_static_view('static', 'static', cache_max_age=3600)
@@ -17,8 +18,7 @@ def main(global_config, **settings):
     add_route('daily_menu_json', '/api/daily')
     add_route('view_menus', '/view_menus/{menu_year}/{menu_month}')
     add_route('view_menu', '/menu/{menu_id}')
-    add_route('view_menus_today', '')
-    add_route('view_menus_today', '/')
+    add_route('view_menus_today', '{fake_data:[/]?}')
     add_route('edit_menus_today', '/edit')
     add_route('update_menu_month', '/edit/{meny_year}/{menu_month}')
     add_route('edit_menus', '/edit_menus/{menu_year}/{menu_month}')
