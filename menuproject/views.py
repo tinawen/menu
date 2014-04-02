@@ -116,7 +116,13 @@ def refresh_menu(menu):
 #view all the menus within the month
 @view_config(route_name='view_menus_today', renderer='templates/view_menus.jinja2')
 @view_config(route_name='view_menus', renderer='templates/view_menus.jinja2')
+@view_config(route_name='select_cafe', renderer='templates/view_menus.jinja2')
 def view_menus(request):
+    if 'cafe_id' in request.matchdict:
+        cafe_id = int(request.matchdict['cafe_id'])
+    else:
+        cafe_id = request.matchdict['cafe_id'] = 1
+
     #figure out the year and month. If the year and month are in request, use them
     #otherwise use today's year and month
     if 'menu_year' in request.matchdict and 'menu_month' in request.matchdict:
@@ -142,7 +148,7 @@ def view_menus(request):
         week_end_date = week_start_date + timedelta(days=7)
         #do the database query, return results in reverse chronilogical order
         menus = DBSession.query(Menu).filter(
-            Menu.cafe_id == int(request.matchdict['cafe_id']),
+            Menu.cafe_id == cafe_id,
             Menu.date >= week_start_date.strftime('%Y-%m-%d'),
             Menu.date < week_end_date.strftime('%Y-%m-%d')).order_by(-Menu.date).order_by(-Menu.time_sort_key).all()
         if len(menus):
@@ -160,7 +166,7 @@ def view_menus(request):
         menus_monthly_url_prefix=make_link(request, 'view_menus/'),
         menu_url_prefix=make_link(request, 'menu/'),
         three_meals=THREE_MEALS)
-    return_params['cafe_id'] = request.matchdict['cafe_id']
+    return_params['cafe_id'] = cafe_id
     return return_params
 
 @view_config(route_name='view_menu', renderer='templates/view_menu.jinja2')

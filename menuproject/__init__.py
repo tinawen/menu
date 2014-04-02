@@ -12,13 +12,13 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
     config.add_static_view('static', 'static', cache_max_age=3600)
     def add_route(func_name, url):
-        config.add_route(func_name, '/{cafe_id}' + url)
+        config.add_route(func_name, '/{cafe_id:\d+}' + url)
 
     add_route('daily_menu', '/daily')
     add_route('daily_menu_json', '/api/daily')
     add_route('view_menus', '/view_menus/{menu_year}/{menu_month}')
     add_route('view_menu', '/menu/{menu_id}')
-    add_route('view_menus_today', '{fake_data:[/]?}')
+    add_route('view_menus_today', '/')
     add_route('edit_menus_today', '/edit')
     add_route('update_menu_month', '/edit/{meny_year}/{menu_month}')
     add_route('edit_menus', '/edit_menus/{menu_year}/{menu_month}')
@@ -29,6 +29,7 @@ def main(global_config, **settings):
     add_route('screen', '/screen')
 
     # Does not need cafe_id
+    config.add_route('select_cafe', '/')
     config.add_route('attach_pictures', '/attach_pictures/{menu_id}')
     config.add_route('delete_picture', '/delete_picture/{menu_id}')
     config.add_route('update_menu_item_allergen', '/update_menu_item_allergen/{menu_item_id}')
