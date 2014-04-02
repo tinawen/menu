@@ -34,7 +34,7 @@ settings = get_appsettings(config_uri)
 engine = engine_from_config(settings, 'sqlalchemy.')
 DBSession.configure(bind=engine)
 
-now = datetime.datetime.now() 
+now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d') 
 
 #figure out which meal this is for
@@ -97,7 +97,7 @@ if len(menu_query.all()) > 0:
      """
     html_part2 ="""
 <div style="display:block; font-size:15; text-align:center">
-View the menu on <a href="http://food.corp.dropbox.com/menu/
+View the menu on <a href="http://food.corp.dropbox.com/
 """
     html_part3 = """
 ">food</a>
@@ -105,7 +105,7 @@ View the menu on <a href="http://food.corp.dropbox.com/menu/
   </body>
 </html>
 """
-    html = html_part1 + desc.encode('utf8') + html_part2 + str(menu.id) + html_part3
+    html = html_part1 + desc.encode('utf8') + html_part2 + str(menu.cafe_id) + """/menu/""" + str(menu.id) + html_part3
     print "sending email:"
     print html
     msg_part  = MIMEText(html, 'html')

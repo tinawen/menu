@@ -17,6 +17,7 @@ def main(global_config, **settings):
     add_route('daily_menu_json', '/api/daily')
     add_route('view_menus', '/view_menus/{menu_year}/{menu_month}')
     add_route('view_menu', '/menu/{menu_id}')
+    add_route('view_menus_today', '')
     add_route('view_menus_today', '/')
     add_route('edit_menus_today', '/edit')
     add_route('update_menu_month', '/edit/{meny_year}/{menu_month}')
