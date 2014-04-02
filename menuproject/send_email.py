@@ -21,6 +21,7 @@ from models import (
     Menu,
     MenuItem,
     Allergen,
+    Cafe,
     )
 
 MAIL_SECRETS = '/home/tina/mail_secrets.json'
@@ -33,8 +34,8 @@ settings = get_appsettings(config_uri)
 engine = engine_from_config(settings, 'sqlalchemy.')
 DBSession.configure(bind=engine)
 
-now = datetime.datetime.now()
-today = now.strftime('%Y-%m-%d')
+now = datetime.datetime.now() 
+today = now.strftime('%Y-%m-%d') 
 
 #figure out which meal this is for
 meal_filter = 1
@@ -46,39 +47,42 @@ else:
     meal_filter = 3
 
 menu_query = DBSession.query(Menu).filter(Menu.date==today).filter(Menu.time_sort_key==meal_filter)
-if len(menu_query.all()) == 1:
-    menu = menu_query.one()
-    if not menu.sent:
-        if len(menu.menus) >= 1:
-            desc = "<div>"
-            for menu_item_id in menu.menus.split(' '):
-                menu_item = DBSession.query(MenuItem).filter(MenuItem.id==menu_item_id).one()
-                allergens = DBSession.query(Allergen).filter(Allergen.menu_item_id==menu_item.id).all()
-                allergen_string = ', '.join([a.allergen for a in allergens])
-                if menu_item.healthy:
-                    desc = desc + "<div style='display: block; text-align:center; font-size:15px; font-weight:bold; color:" + HEALTH_COLORS[menu_item.healthy-1] + "'>" + "&hearts; " + "<font color=black>" + menu_item.name.decode('utf8') + '</font></div>'
-                else:
-                    desc = desc + "<div style='display: block; text-align:center; font-size:15px; font-weight:bold;'>" + menu_item.name.decode('utf8') + '</div>'
+if len(menu_query.all()) > 0:
+    desc = "<div>"
+    for menu in menu_query.all():
+        if not menu.sent:
+            cafe_name = DBSession.query(Cafe).filter(Cafe.id==menu.cafe_id).one().name
+            desc = desc + "<div style='display:block; text-align:center; font-size:17px;font-weight:bold;'>"+cafe_name.decode('utf8') + '</div>'
+            if len(menu.menus) >= 1:
+                for menu_item_id in menu.menus.split(' '):
+                    menu_item = DBSession.query(MenuItem).filter(MenuItem.id==menu_item_id).one()
+                    allergens = DBSession.query(Allergen).filter(Allergen.menu_item_id==menu_item.id).all()
+                    allergen_string = ', '.join([a.allergen for a in allergens])
+                    if menu_item.healthy:
+                        desc = desc + "<div style='display: block; text-align:center; font-size:15px; font-weight:bold; color:" + HEALTH_COLORS[menu_item.healthy-1] + "'>" + "&hearts; " + "<font color=black>" + menu_item.name.decode('utf8') + '</font></div>'
+                    else:
+                        desc = desc + "<div style='display: block; text-align:center; font-size:15px; font-weight:bold;'>" + menu_item.name.decode('utf8') + '</div>'
 
-                if len(menu_item.description.decode('utf8')):
-                    desc = desc + "<div style='display: block; font-size:13px; text-align:center'>"
-                    desc = desc + menu_item.description.decode('utf8')
-                    desc = desc + '</div>'
-                if len(allergen_string):
-                    desc = desc + "<div style='display: block; font-size:11px; text-align:center'>"
-                    desc = desc + '(' + allergen_string + ')'
-                    desc = desc + '</div>'
-                desc = desc + '</div><br>\n'
+                    if len(menu_item.description.decode('utf8')):
+                        desc = desc + "<div style='display: block; font-size:13px; text-align:center'>"
+                        desc = desc + menu_item.description.decode('utf8')
+                        desc = desc + '</div>'
+                    if len(allergen_string):
+                        desc = desc + "<div style='display: block; font-size:11px; text-align:center'>"
+                        desc = desc + '(' + allergen_string + ')'
+                        desc = desc + '</div>'
+                    desc = desc + '</div><br>\n'
+        desc = desc + '<br>\n'
 
-            json_data = open(MAIL_SECRETS)
-            data = json.load(json_data)
-            json_data.close()
-            msg = MIMEMultipart()
+    json_data = open(MAIL_SECRETS)
+    data = json.load(json_data)
+    json_data.close()
+    msg = MIMEMultipart()
 
-            msg['From'] = data["sender"]
-            msg['To'] = data["recipient"]
-            msg['Subject'] = get_menu_name(menu).decode('utf8')
-            html_part1 = """
+    msg['From'] = data["sender"]
+    msg['To'] = data["recipient"]
+    msg['Subject'] = get_menu_name(menu).decode('utf8')
+    html_part1 = """
 <html>
   <head></head>
   <body>
@@ -91,27 +95,27 @@ if len(menu_query.all()) == 1:
     Today Tuckshop is serving:
 </div><br>
      """
-            html_part2 ="""
+    html_part2 ="""
 <div style="display:block; font-size:15; text-align:center">
 View the menu on <a href="http://food.corp.dropbox.com/menu/
 """
-            html_part3 = """
+    html_part3 = """
 ">food</a>
 </div>
   </body>
 </html>
 """
-            html = html_part1 + desc.encode('utf8') + html_part2 + str(menu.id) + html_part3
-            print "sending email:"
-            print html
-            msg_part  = MIMEText(html, 'html')
-            msg.attach(msg_part)
+    html = html_part1 + desc.encode('utf8') + html_part2 + str(menu.id) + html_part3
+    print "sending email:"
+    print html
+    msg_part  = MIMEText(html, 'html')
+    msg.attach(msg_part)
 
-            s = smtplib.SMTP()
-            s.connect()
-            s.sendmail(data["sender"], data["recipient"], msg.as_string())
-            s.close()
-            menu_query.update({"sent":True}, synchronize_session=False)
+    s = smtplib.SMTP()
+    s.connect()
+    s.sendmail(data["sender"], data["recipient"], msg.as_string())
+    s.close()
+    menu_query.update({"sent":True}, synchronize_session=False)
 
 
 

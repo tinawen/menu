@@ -76,7 +76,7 @@ def build_months_menu():
 # update menu on google calendar
 def update_gcalendar(menu):
     if not debug_mode():
-        os.spawnl(os.P_WAIT, '/usr/bin/python', 'python', GCALENDAR_PATH, str(menu.id))
+        os.spawnl(os.P_WAIT, '/usr/bin/python', 'python', GCALENDAR_PATH, str(menu.id), str(menu.cafe_id))
 
 #send an email about the menu
 @view_config(route_name='publish', renderer='string')
@@ -139,7 +139,10 @@ def view_menus(request):
         week_start_date = week_end_date - timedelta(days=week_end_date.isoweekday())
         week_end_date = week_start_date + timedelta(days=7)
         #do the database query, return results in reverse chronilogical order
-        menus = DBSession.query(Menu).filter(Menu.date >= week_start_date.strftime('%Y-%m-%d')).filter(Menu.date < week_end_date.strftime('%Y-%m-%d')).order_by(-Menu.date).order_by(-Menu.time_sort_key).all()
+        menus = DBSession.query(Menu).filter(
+            Menu.cafe_id == int(request.matchdict['cafe_id']),
+            Menu.date >= week_start_date.strftime('%Y-%m-%d'),
+            Menu.date < week_end_date.strftime('%Y-%m-%d')).order_by(-Menu.date).order_by(-Menu.time_sort_key).all()
         if len(menus):
             week_start_date_list.append(week_start_date.strftime("%m/%d/%y"))
             weekly_menus.append(menus)
@@ -147,32 +150,48 @@ def view_menus(request):
 
     month_menus = build_months_menu()
     month_string = convert_to_month_string(month, year)
-    return dict(menus=weekly_menus, week_start_list = week_start_date_list, selected_month_string=month_string, month_menus=month_menus, menus_monthly_url_prefix='/view_menus/', menu_url_prefix='/menu/', three_meals=THREE_MEALS)
+    return_params = dict(
+        menus=weekly_menus,
+        week_start_list = week_start_date_list,
+        selected_month_string=month_string,
+        month_menus=month_menus,
+        menus_monthly_url_prefix=make_link(request, 'view_menus/'),
+        menu_url_prefix=make_link(request, 'menu/'),
+        three_meals=THREE_MEALS)
+    return_params['cafe_id'] = request.matchdict['cafe_id']
+    return return_params
 
 @view_config(route_name='view_menu', renderer='templates/view_menu.jinja2')
 def view_menu(request):
     menu = DBSession.query(Menu).filter(Menu.id==request.matchdict['menu_id']).one()
-    return refresh_menu(menu)
+    return_params = refresh_menu(menu)
+    return_params['cafe_id'] = request.matchdict['cafe_id']
+    return return_params
+
+def make_link(request, action_name):
+    cafe_id = int(request.matchdict['cafe_id'])
+    return '/%d/%s' % (cafe_id, action_name)
 
 # view all the menus of the month, in edit view
 @view_config(route_name='edit_menus', renderer='templates/edit_menus.jinja2')
 @view_config(route_name='edit_menus_today', renderer='templates/edit_menus.jinja2')
 def edit_menus(request):
     return_params = view_menus(request)
-    return_params['menus_monthly_url_prefix'] = '/edit_menus/'
-    return_params['menu_url_prefix'] = '/edit_menu/'
-    return_params['create_menu_url'] = '/create_menu'
+    return_params['menus_monthly_url_prefix'] = make_link(request, 'edit_menus/')
+    return_params['menu_url_prefix'] = make_link(request, 'edit_menu/')
+    return_params['create_menu_url'] = make_link(request, 'create_menu')
+    return_params['cafe_id'] = request.matchdict['cafe_id']
     return return_params
 
 # editing a specific menu
 @view_config(route_name='edit_menu', renderer='templates/edit_menu.jinja2')
 def edit_menu(request):
     #get the corresponding menu items and allergens from database
-    menu = DBSession.query(Menu).filter(Menu.id==request.matchdict['menu_id']).one()
+    menu = DBSession.query(Menu).filter(Menu.cafe_id==request.matchdict['cafe_id'], Menu.id==request.matchdict['menu_id']).one()
     return_params = refresh_menu(menu)
     return_params['allergen_list'] = ALLERGENS
     return_params['healthy_factor'] = HEALTHY_FACTOR
-    return_params['create_menu_item_url'] = '/create_menu_item/'+ str(menu.id)
+    return_params['create_menu_item_url'] = make_link(request, 'create_menu_item/'+ str(menu.id))
     images_id = menu.images_id
     if images_id:
         images_id = images_id.split(' ')
@@ -181,24 +200,32 @@ def edit_menu(request):
     else:
         images = []
     return_params['thumbs'] = images
+    return_params['cafe_id'] = request.matchdict['cafe_id']
     return return_params
 
 #create a menu
 @view_config(route_name='create_menu', renderer='templates/view_menus.jinja2')
 def create_menu(request):
     #see if there's already a menu created with the same params
-    menu = DBSession.query(Menu).filter(Menu.date==request.params['date']).filter(Menu.time_sort_key==int(request.params['time'])).first()
+    m = request.matchdict
+    menu = DBSession.query(Menu).filter(Menu.cafe_id==request.matchdict['cafe_id'])
+    if 'date' in request.params:
+        menu = menu.filter(Menu.date==request.params['date'])
+    if 'time' in request.params:
+        menu = menu.filter(Menu.time_sort_key==int(request.params['time']))
+    menu = menu.first()
+
     #if not, create one
     if menu is None:
         # verify date
         date = request.params['date']
         if date is '0000-00-00':
             return HTTPFound(location= request.route_url('edit_menus_today'))
-        menu = Menu(name='', date=request.params['date'], time_sort_key=request.params['time'], menus='', sent=False)
+        menu = Menu(cafe_id=int(m['cafe_id']), name='', date=request.params['date'], time_sort_key=request.params['time'], menus='', sent=False)
         DBSession.add(menu)
         DBSession.flush()
         DBSession.refresh(menu)
-    url = request.route_url('edit_menu', menu_id=menu.id, allergen_list=ALLERGENS, healthy_factor=HEALTHY_FACTOR)
+    url = request.route_url('edit_menu', cafe_id=int(m['cafe_id']), menu_id=menu.id, allergen_list=ALLERGENS, healthy_factor=HEALTHY_FACTOR)
     update_gcalendar(menu)
 
     return HTTPFound(location=url)
@@ -242,7 +269,7 @@ def create_menu_item(request):
     #update google calendar
     update_gcalendar(menu)
 
-    url = request.route_url('edit_menu', menu_id=request.matchdict['menu_id'])
+    url = request.route_url('edit_menu', cafe_id=int(request.matchdict['cafe_id']), menu_id=request.matchdict['menu_id'])
     return HTTPFound(location=url)
 
 # set the menus string to be the new order
@@ -391,7 +418,7 @@ def update_menu_item_healthy(request):
     menuItem.update({"healthy":int(request.params['healthy'])})
     return 'ok'
 
-def get_daily_menu():
+def get_daily_menu(cafe_id):
 #find the menu to display
     now = datetime.datetime.now()
     today = now.strftime('%Y-%m-%d')
@@ -408,10 +435,10 @@ def get_daily_menu():
     else:
         meal_filter = 3
 
-    menu = DBSession.query(Menu).filter(Menu.date >= today).filter(Menu.time_sort_key >= meal_filter).order_by(Menu.date).order_by(Menu.time_sort_key).first()
+    menu = DBSession.query(Menu).filter(Menu.cafe_id == cafe_id, Menu.date >= today, Menu.time_sort_key >= meal_filter).order_by(Menu.date).order_by(Menu.time_sort_key).first()
     # if there isn't a correspondong menu, display the newest one
     if menu is None:
-        menu = DBSession.query(Menu).order_by(-Menu.date).order_by(-Menu.time_sort_key).first()
+        menu = DBSession.query(Menu).filter(Menu.cafe_id == cafe_id).order_by(-Menu.date).order_by(-Menu.time_sort_key).first()
     if menu is None:
         return None
     return menu
@@ -419,7 +446,8 @@ def get_daily_menu():
 #for displaying the daily menu on big screen with ken burn effect
 @view_config(route_name='screen', renderer='templates/kenburn_daily.jinja2')
 def screen(request):
-    menu = get_daily_menu()
+    cafe_id = int(request.matchdict['cafe_id'])
+    menu = get_daily_menu(cafe_id)
     if menu.images_id:
         images_id = menu.images_id.split(' ')
         images = DBSession.query(Image).filter(Image.id.in_(images_id)).all()
@@ -430,7 +458,8 @@ def screen(request):
 #for displaying the daily menu
 @view_config(route_name='daily_menu', renderer='templates/daily_menu.jinja2')
 def daily_menu(request):
-    menu = get_daily_menu()
+    cafe_id = int(request.matchdict['cafe_id'])
+    menu = get_daily_menu(cafe_id)
     if menu:
         return refresh_menu(menu)
     else:

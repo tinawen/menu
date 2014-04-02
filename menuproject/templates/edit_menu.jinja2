@@ -70,7 +70,7 @@
 	          <h1>Editing {{menu.date}}, {{three_meals[menu.time_sort_key-1]}}</h1>
 	          <input type="text" class="title" id="menuTitle" value="{{menu.name.decode('utf8')}}" menu_id="{{menu.id}}" />
 	          <div class="button" id="add-menu-item">Add a Dish</div>
-	          <a class="back button" href="/edit">Back to Menus</a>
+	          <a class="back button" href="/{{cafe_id}}/edit">Back to Menus</a>
             </div>
 
             <div class="modal-wrap" id="add-menu-item-modal-wrap">

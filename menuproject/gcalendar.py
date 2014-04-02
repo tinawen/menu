@@ -17,6 +17,7 @@ from models import (
     MenuItem,
     Menu,
     Allergen,
+    Cafe,
     )
 
 from pyramid.paster import (
@@ -42,7 +43,11 @@ DBSession.configure(bind=engine)
 
 def get_menu_name(menu):
     meal = THREE_MEALS[int(menu.time_sort_key-1)]
-    menu_name = str(menu.date) + ' ' + meal
+    cafe_name = DBSession.query(Cafe).filter(Cafe.id==menu.cafe_id).one().name
+    if cafe_name: 
+        menu_name = cafe_name + ' ' + str(menu.date) + ' ' + meal
+    else:
+        menu_name = str(menu.date) + ' ' + meal
     if menu.name:
         menu_name = menu_name + ': ' + menu.name
     return menu_name
@@ -89,7 +94,7 @@ def get_menu_json(menu):
         json_result.append((menu_item_name, menu_item_desc))
         return json.dumps(json_result)
 
-def update_menu_on_google_calendar(menu_id):
+def update_menu_on_google_calendar(menu_id, cafe_id):
     try:
         with open(CLIENT_SECRETS) as f: pass
     except IOError as e:
@@ -108,10 +113,11 @@ def update_menu_on_google_calendar(menu_id):
 
     try:
         #validate input
-        menu_query = DBSession.query(Menu).filter(Menu.id==int(menu_id))
+        menu_query = DBSession.query(Menu).filter(Menu.id==int(menu_id), Menu.cafe_id==int(cafe_id))
         if menu_query.count() != 1:
             return
         menu = menu_query.one()
+        print "updating with menu", menu
         time = int(menu.time_sort_key)
         meal = THREE_MEALS[time-1]
         start_time = CALENDAR_MEAL_TIMES[time-1][0]
@@ -123,15 +129,17 @@ def update_menu_on_google_calendar(menu_id):
         #find the event
         events = service.events().list(calendarId=data["tuckshop_calendar_id"], timeMin=str(menu.date) + 'T' + start_time + ':00:00.000-07:00', timeMax=str(menu.date) + 'T' + end_time + ':00:00.000-07:00').execute()
 
-        if 'items' in events and events['items'] and len(events['items']) == 1:
-            event = events['items'][0]
-            desc = get_menu_desc(menu, True)
-            event['summary'] = get_menu_name(menu)
-            event['description'] = desc
-            updated_event = service.events().update(calendarId=data["tuckshop_calendar_id"], eventId=event['id'], body=event).execute()
-        else:
-            menu_description = u"%s", get_menu_desc(menu, True)
-            event = {
+        cafe_name = DBSession.query(Cafe).filter(Cafe.id==cafe_id).one().name
+        if 'items' in events and events['items'] and len(events['items']) > 0:
+            for event in events['items']:
+                if event['summary'].startswith(cafe_name):
+                    desc = get_menu_desc(menu, True)
+                    event['summary'] = get_menu_name(menu)
+                    event['description'] = desc
+                    updated_event = service.events().update(calendarId=data["tuckshop_calendar_id"], eventId=event['id'], body=event).execute()
+                    return
+        menu_description = get_menu_desc(menu, True)
+        event = {
             'summary': get_menu_name(menu),
             'location': 'Tuckshop',
             'start': {
@@ -143,9 +151,9 @@ def update_menu_on_google_calendar(menu_id):
                     'timeZone': 'GMT'
                 },
             'description': menu_description,
-            }
+        }
 
-            created_event = service.events().insert(calendarId=data["tuckshop_calendar_id"], body=event).execute()
+        created_event = service.events().insert(calendarId=data["tuckshop_calendar_id"], body=event).execute()
     except AccessTokenRefreshError:
         #just added
         credentials.refresh(httplib2.Http())
@@ -190,4 +198,4 @@ def delete_all():
                'the application to re-authorize')
 
 if __name__ == '__main__':
-    update_menu_on_google_calendar(sys.argv[1])
+    update_menu_on_google_calendar(sys.argv[1], sys.argv[2])
